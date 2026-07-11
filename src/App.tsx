@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect, type DragEvent, type ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { JSONPath } from 'jsonpath-plus'
+import TreeView from './TreeView'
 import './App.css'
 
 // ============ JSON → Java POJO ============
@@ -213,6 +214,7 @@ function App() {
   const [lineCount, setLineCount] = useState(0)
   const [dragOver, setDragOver] = useState(false)
   const [mode, setMode] = useState<'normal' | 'diff' | 'jsonpath'>('normal')
+  const [viewMode, setViewMode] = useState<'text' | 'tree'>('text')
   const [diffA, setDiffA] = useState('')
   const [diffB, setDiffB] = useState('')
   const [diffResult, setDiffResult] = useState<DiffEntry[] | null>(null)
@@ -386,6 +388,7 @@ function App() {
     setErrorInfo('')
     setCharCount(0)
     setLineCount(0)
+    setViewMode('text')
   }, [])
 
   const handleCopy = useCallback(() => {
@@ -466,6 +469,7 @@ function App() {
     setDiffResult(null)
     setDiffA('')
     setDiffB('')
+    setViewMode('text')
   }, [])
 
   // ========== JSONPath ==========
@@ -508,6 +512,7 @@ function App() {
     setMode('normal')
     setJpExpr('')
     setJpResult('')
+    setViewMode('text')
   }, [])
 
   const handleJPKeyDown = useCallback((e: React.KeyboardEvent) => {
@@ -524,6 +529,22 @@ function App() {
   }, [updateStats])
 
   // ========== Language ==========
+
+  const toggleViewMode = useCallback(() => {
+    if (viewMode === 'text') {
+      // Switch to tree: need valid JSON in output
+      const trimmed = output.trim()
+      if (!trimmed) { showToast('error', t('toast.input.empty')); return }
+      try {
+        JSON.parse(trimmed)
+        setViewMode('tree')
+      } catch {
+        showToast('error', t('toast.invalid'))
+      }
+    } else {
+      setViewMode('text')
+    }
+  }, [viewMode, output, showToast, t])
 
   const switchLang = useCallback((code: string) => {
     i18n.changeLanguage(code)
@@ -638,10 +659,27 @@ function App() {
           <div className="editor-panel">
             <div className="panel-header">
               <span>{t('panel.output')}</span>
-              <span className="action-link" onClick={handleCopy}>{t('btn.copy')}</span>
+              <div className="panel-header-right">
+                {output && (() => {
+                  try { JSON.parse(output.trim()); return true } catch { return false }
+                })() && (
+                  <span className={`view-toggle ${viewMode === 'tree' ? 'active' : ''}`} onClick={toggleViewMode}>
+                    {viewMode === 'text' ? '🌳 Tree' : '📄 Text'}
+                  </span>
+                )}
+                <span className="action-link" onClick={handleCopy}>{t('btn.copy')}</span>
+              </div>
             </div>
             <div className="output-area">
-              {output || <span className="output-hint">{t('textarea.output_hint')}</span>}
+              {output ? (
+                viewMode === 'tree' ? (
+                  <TreeView data={(() => { try { return JSON.parse(output.trim()) } catch { return null } })()} />
+                ) : (
+                  output
+                )
+              ) : (
+                <span className="output-hint">{t('textarea.output_hint')}</span>
+              )}
             </div>
             {errorInfo && <div className="error-lines show">{errorInfo}</div>}
           </div>

@@ -289,6 +289,36 @@ header h1 {
   color: #7dd3fc;
 }
 
+.panel-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.view-toggle {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  font-weight: 500;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.view-toggle:hover {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+.view-toggle.active {
+  background: #1e3a5f;
+  border-color: #3b82f6;
+  color: #38bdf8;
+}
+
 textarea {
   width: 100%;
   min-height: 350px;
@@ -432,6 +462,60 @@ textarea::placeholder {
 .diff-b {
   color: #86efac;
   word-break: break-all;
+}
+
+/* ===== Tree View ===== */
+.tree-view {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  padding: 4px 0;
+}
+
+.tv-row {
+  padding-left: 0;
+}
+
+.tv-children {
+  padding-left: 20px;
+}
+
+.tv-toggle {
+  display: inline-block;
+  width: 14px;
+  cursor: pointer;
+  color: #64748b;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.tv-toggle:hover {
+  color: #38bdf8;
+}
+
+.tv-key {
+  color: #818cf8;
+}
+
+.tv-bracket {
+  color: #64748b;
+}
+
+.tv-string {
+  color: #86efac;
+}
+
+.tv-number {
+  color: #67e8f9;
+}
+
+.tv-bool {
+  color: #fde68a;
+}
+
+.tv-null {
+  color: #a78bfa;
+  font-style: italic;
 }
 
 /* ===== Stats Bar ===== */
