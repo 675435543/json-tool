@@ -528,7 +528,6 @@ function App() {
   const switchLang = useCallback((code: string) => {
     i18n.changeLanguage(code)
     setLangOpen(false)
-    document.documentElement.dir = code === 'ar' ? 'rtl' : 'ltr'
   }, [i18n])
 
   useEffect(() => {
