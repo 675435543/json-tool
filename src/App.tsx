@@ -548,7 +548,7 @@ function App() {
   const currentLang = LANG_OPTIONS.find(l => l.code === i18n.language) || LANG_OPTIONS[0]
 
   return (
-    <div className={`container ${i18n.language === 'ar' ? 'rtl' : ''}`}>
+    <div className="container">
       <header>
         <div className="header-top">
           <h1>🔧 {t('app.title')}</h1>

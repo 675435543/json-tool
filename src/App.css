@@ -543,31 +543,50 @@ footer {
 }
 
 /* ===== RTL support ===== */
-.container.rtl {
-  direction: rtl;
+/* Code/monospace areas must stay LTR even in RTL mode */
+html[dir="rtl"] textarea,
+html[dir="rtl"] .output-area,
+html[dir="rtl"] .jp-expr-input,
+html[dir="rtl"] .diff-path,
+html[dir="rtl"] .diff-value,
+html[dir="rtl"] .diff-a,
+html[dir="rtl"] .diff-b,
+html[dir="rtl"] .error-lines,
+html[dir="rtl"] code {
+  direction: ltr;
+  text-align: left;
 }
 
-.container.rtl .lang-dropdown {
+/* RTL layout adjustments */
+html[dir="rtl"] .lang-dropdown {
   right: auto;
   left: 0;
 }
 
-.container.rtl .diff-compare-btn {
+html[dir="rtl"] .diff-compare-btn {
   margin-left: 0;
   margin-right: auto;
 }
 
-.container.rtl .diff-added {
+html[dir="rtl"] .diff-added {
   border-left: none;
   border-right: 3px solid #22c55e;
 }
 
-.container.rtl .diff-removed {
+html[dir="rtl"] .diff-removed {
   border-left: none;
   border-right: 3px solid #ef4444;
 }
 
-.container.rtl .diff-modified {
+html[dir="rtl"] .diff-modified {
   border-left: none;
   border-right: 3px solid #f59e0b;
+}
+
+html[dir="rtl"] .panel-header {
+  flex-direction: row;
+}
+
+html[dir="rtl"] .jp-expr-area {
+  flex-direction: row;
 }
