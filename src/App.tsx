@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect, type DragEvent, type ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
+import { JSONPath } from 'jsonpath-plus'
 import './App.css'
 
 // ============ JSON → Java POJO ============
@@ -8,18 +9,17 @@ function toPascalCase(s: string): string {
   return s.replace(/[^a-zA-Z0-9_]/g, '_').replace(/(?:^|_)(\w)/g, (_, c) => c.toUpperCase())
 }
 
-function javaType(val: any, depth: number): string {
+function javaType(val: any): string {
   if (val === null || val === undefined) return 'Object'
   if (typeof val === 'string') return 'String'
   if (typeof val === 'number') return Number.isInteger(val) ? 'int' : 'double'
   if (typeof val === 'boolean') return 'boolean'
   if (Array.isArray(val)) {
     if (val.length === 0) return 'List<Object>'
-    const inner = val.map(v => javaType(v, depth))
+    const inner = val.map(v => javaType(v))
     const innerType = inner.every(t => t === inner[0]) ? inner[0] : 'Object'
     return `List<${innerType}>`
   }
-  if (typeof val === 'object') return `Inner${toPascalCase('')}`
   return 'Object'
 }
 
@@ -43,7 +43,7 @@ function generateJavaClass(obj: Record<string, any>, className: string): string 
       type = `List<${innerName}>`
       innerClasses.push(generateJavaClass(val[0], innerName))
     } else {
-      type = javaType(val, 0)
+      type = javaType(val)
     }
 
     lines.push(``)
@@ -62,6 +62,81 @@ function generateJavaClass(obj: Record<string, any>, className: string): string 
   lines.push(``)
   lines.push(...innerClasses)
 
+  return lines.join('\n')
+}
+
+// ============ JSON → TypeScript ============
+
+function toTSName(key: string): string {
+  const s = key.replace(/[^a-zA-Z0-9_]/g, '_')
+  if (/^[0-9]/.test(s)) return `_${s}`
+  return s
+}
+
+function tsType(val: any, seen: Set<any>): string {
+  if (val === null || val === undefined) return 'any'
+  if (typeof val === 'string') return 'string'
+  if (typeof val === 'number') return 'number'
+  if (typeof val === 'boolean') return 'boolean'
+  if (Array.isArray(val)) {
+    if (val.length === 0) return 'any[]'
+    const inners = val.map(v => tsType(v, seen))
+    const inner = inners.every(t => t === inners[0]) ? inners[0] : 'any'
+    return `${inner}[]`
+  }
+  if (typeof val === 'object') {
+    if (seen.has(val)) return 'any /* circular */'
+    seen.add(val)
+    const entries = Object.entries(val as Record<string, any>)
+    if (entries.length === 0) return 'Record<string, any>'
+    const props = entries.map(([k, v]) => `  ${toTSName(k)}: ${tsType(v, seen)};`)
+    return `{\n${props.join('\n')}\n}`
+  }
+  return 'any'
+}
+
+function generateTSInterfaces(obj: Record<string, any>, name: string): string {
+  const lines: string[] = []
+  const used = new Set<string>()
+  const seen = new Set<any>()
+
+  function process(obj: any, name: string): string {
+    if (obj === null || typeof obj !== 'object' || Array.isArray(obj)) return tsType(obj, seen)
+    const id = name
+    if (used.has(id)) return id
+    used.add(id)
+
+    const props: string[] = []
+    const children: { key: string; childName: string; val: any }[] = []
+
+    for (const [key, val] of Object.entries(obj as Record<string, any>)) {
+      const k = toTSName(key)
+      if (val !== null && typeof val === 'object' && !Array.isArray(val)) {
+        const childName = `${name}${toPascalCase(key)}`
+        children.push({ key: k, childName, val })
+        props.push(`  ${k}: ${childName};`)
+      } else if (Array.isArray(val) && val.length > 0 && typeof val[0] === 'object' && val[0] !== null && !Array.isArray(val[0])) {
+        const childName = `${name}${toPascalCase(key)}Item`
+        children.push({ key: k, childName, val: val[0] })
+        props.push(`  ${k}: ${childName}[];`)
+      } else {
+        props.push(`  ${k}: ${tsType(val, new Set())};`)
+      }
+    }
+
+    lines.push(`export interface ${name} {`)
+    lines.push(props.join('\n'))
+    lines.push('}')
+    lines.push('')
+
+    for (const child of children) {
+      process(child.val, child.childName)
+    }
+
+    return name
+  }
+
+  process(obj, name)
   return lines.join('\n')
 }
 
@@ -117,7 +192,7 @@ function diffJSON(a: any, b: any, path = ''): DiffEntry[] {
   return result
 }
 
-// ============ Language flags ============
+// ============ Language options ============
 
 const LANG_OPTIONS = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
@@ -132,15 +207,17 @@ function App() {
   const { t, i18n } = useTranslation()
   const [input, setInput] = useState('')
   const [output, setOutput] = useState('')
-  const [toast, setToast] = useState<{ type: 'success' | 'error'; msg: string } | null>(null)
+  const [toast, setToast] = useState<{ type: 'success' | 'error' | 'info'; msg: string } | null>(null)
   const [errorInfo, setErrorInfo] = useState('')
   const [charCount, setCharCount] = useState(0)
   const [lineCount, setLineCount] = useState(0)
   const [dragOver, setDragOver] = useState(false)
-  const [mode, setMode] = useState<'normal' | 'diff'>('normal')
+  const [mode, setMode] = useState<'normal' | 'diff' | 'jsonpath'>('normal')
   const [diffA, setDiffA] = useState('')
   const [diffB, setDiffB] = useState('')
   const [diffResult, setDiffResult] = useState<DiffEntry[] | null>(null)
+  const [jpExpr, setJpExpr] = useState('')
+  const [jpResult, setJpResult] = useState<string>('')
   const [langOpen, setLangOpen] = useState(false)
 
   const toastTimer = useRef<ReturnType<typeof setTimeout>>(null)
@@ -150,7 +227,7 @@ function App() {
 
   // ========== Toast ==========
 
-  const showToast = useCallback((type: 'success' | 'error', msg: string) => {
+  const showToast = useCallback((type: 'success' | 'error' | 'info', msg: string) => {
     if (toastTimer.current) clearTimeout(toastTimer.current)
     setToast({ type, msg })
     toastTimer.current = setTimeout(() => setToast(null), 3000)
@@ -339,12 +416,29 @@ function App() {
       showToast('error', t('toast.java_pojo_fail'))
       return
     }
-    const className = 'JsonRoot'
-    const pojo = generateJavaClass(parsed, className)
+    const pojo = generateJavaClass(parsed, 'JsonRoot')
     setOutput(pojo)
     setErrorInfo('')
     showToast('success', t('toast.java_pojo'))
     updateStats(pojo)
+  }, [input, tryParseJSON, showToast, updateStats, t])
+
+  // ========== JSON → TypeScript ==========
+
+  const handleToTypeScript = useCallback(() => {
+    const trimmed = input.trim()
+    if (!trimmed) { showToast('error', t('toast.input.empty')); return }
+    const parsed = tryParseJSON(trimmed)
+    if (!parsed) { showToast('error', t('toast.invalid')); return }
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+      showToast('error', t('toast.ts_interface_fail'))
+      return
+    }
+    const ts = generateTSInterfaces(parsed, 'Root')
+    setOutput(ts)
+    setErrorInfo('')
+    showToast('success', t('toast.ts_interface'))
+    updateStats(ts)
   }, [input, tryParseJSON, showToast, updateStats, t])
 
   // ========== JSON Diff ==========
@@ -353,13 +447,10 @@ function App() {
     const ta = diffA.trim()
     const tb = diffB.trim()
     if (!ta && !tb) { showToast('error', t('toast.diff_empty')); return }
-
     const pa = tryParseJSON(ta)
     const pb = tryParseJSON(tb)
-
     if (!pa) { showToast('error', t('toast.no_diff_a')); return }
     if (!pb) { showToast('error', t('toast.no_diff_b')); return }
-
     const result = diffJSON(pa, pb)
     setDiffResult(result)
   }, [diffA, diffB, tryParseJSON, showToast, t])
@@ -377,6 +468,52 @@ function App() {
     setDiffB('')
   }, [])
 
+  // ========== JSONPath ==========
+
+  const handleJPQuery = useCallback(() => {
+    const expr = jpExpr.trim()
+    if (!expr) { showToast('error', t('toast.jsonpath_empty')); return }
+
+    const trimmed = input.trim()
+    if (!trimmed) { showToast('error', t('toast.input.empty')); return }
+
+    const parsed = tryParseJSON(trimmed)
+    if (!parsed) { showToast('error', t('toast.invalid')); return }
+
+    try {
+      const results = JSONPath({ path: expr, json: parsed })
+      if (results.length === 0) {
+        setJpResult(t('toast.jsonpath_no_result'))
+        showToast('info', t('toast.jsonpath_no_result'))
+      } else {
+        const formatted = results.map((r: any, i: number) => `[${i}] ${JSON.stringify(r, null, 2)}`).join('\n\n')
+        setJpResult(formatted)
+        showToast('success', t('toast.jsonpath_result', { count: results.length }))
+      }
+    } catch (e: any) {
+      showToast('error', t('toast.jsonpath_invalid'))
+      setJpResult(`Error: ${(e as Error).message}`)
+    }
+  }, [jpExpr, input, tryParseJSON, showToast, t])
+
+  const handleJPMode = useCallback(() => {
+    setMode('jsonpath')
+    setOutput('')
+    setErrorInfo('')
+    setJpExpr('')
+    setJpResult('')
+  }, [])
+
+  const handleExitJP = useCallback(() => {
+    setMode('normal')
+    setJpExpr('')
+    setJpResult('')
+  }, [])
+
+  const handleJPKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleJPQuery()
+  }, [handleJPQuery])
+
   // ========== Input change ==========
 
   const handleInputChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -391,16 +528,12 @@ function App() {
   const switchLang = useCallback((code: string) => {
     i18n.changeLanguage(code)
     setLangOpen(false)
-    // RTL for Arabic
     document.documentElement.dir = code === 'ar' ? 'rtl' : 'ltr'
   }, [i18n])
 
-  // Close lang dropdown on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (langRef.current && !langRef.current.contains(e.target as Node)) {
-        setLangOpen(false)
-      }
+      if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false)
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
@@ -445,7 +578,7 @@ function App() {
         {toast?.msg || ''}
       </div>
 
-      {/* Toolbar — only in normal mode */}
+      {/* ===== Toolbar (normal mode only) ===== */}
       {mode === 'normal' && (
         <div className="toolbar">
           <div className="toolbar-group">
@@ -458,6 +591,10 @@ function App() {
             <button className="btn btn-purple" onClick={handleToCSV}>{t('btn.to_csv')}</button>
             <button className="btn btn-outline" onClick={handleEscape}>{t('btn.escape')}</button>
             <button className="btn btn-purple" onClick={handleToJavaPOJO}>{t('btn.java_pojo')}</button>
+            <button className="btn btn-purple" onClick={handleToTypeScript}>{t('btn.to_typescript')}</button>
+          </div>
+          <div className="toolbar-group">
+            <button className="btn btn-purple" onClick={handleJPMode}>{t('btn.jsonpath')}</button>
             <button className="btn btn-purple" onClick={handleDiffMode}>{t('btn.diff')}</button>
           </div>
           <div className="toolbar-group">
@@ -468,7 +605,7 @@ function App() {
         </div>
       )}
 
-      {/* Upload zone — normal mode only */}
+      {/* ===== Upload zone (normal mode only) ===== */}
       {mode === 'normal' && (
         <div
           className={`upload-zone ${dragOver ? 'dragover' : ''}`}
@@ -489,9 +626,7 @@ function App() {
           <div className="editor-panel">
             <div className="panel-header">
               <span>{t('panel.input')}</span>
-              <span className="action-link" onClick={() => textareaRef.current?.focus()}>
-                {t('panel.input')}
-              </span>
+              <span className="action-link" onClick={() => textareaRef.current?.focus()}>{t('panel.input')}</span>
             </div>
             <textarea
               ref={textareaRef}
@@ -501,7 +636,6 @@ function App() {
               spellCheck={false}
             />
           </div>
-
           <div className="editor-panel">
             <div className="panel-header">
               <span>{t('panel.output')}</span>
@@ -519,40 +653,20 @@ function App() {
       {mode === 'diff' && (
         <div className="diff-section">
           <div className="diff-toolbar">
-            <button className="btn btn-outline" onClick={handleExitDiff}>
-              {t('diff.btn_back')}
-            </button>
-            <button className="btn btn-purple diff-compare-btn" onClick={handleDiffCompare}>
-              🔍 {t('diff.compare')}
-            </button>
+            <button className="btn btn-outline" onClick={handleExitDiff}>{t('diff.btn_back')}</button>
+            <button className="btn btn-purple diff-compare-btn" onClick={handleDiffCompare}>🔍 {t('diff.compare')}</button>
           </div>
-
           <div className="editor-area">
             <div className="editor-panel">
-              <div className="panel-header">
-                <span>{t('panel.json_a')}</span>
-              </div>
-              <textarea
-                value={diffA}
-                onChange={e => setDiffA(e.target.value)}
-                placeholder={t('textarea.placeholder')}
-                spellCheck={false}
-              />
+              <div className="panel-header"><span>{t('panel.json_a')}</span></div>
+              <textarea value={diffA} onChange={e => setDiffA(e.target.value)} placeholder={t('textarea.placeholder')} spellCheck={false} />
             </div>
             <div className="editor-panel">
-              <div className="panel-header">
-                <span>{t('panel.json_b')}</span>
-              </div>
-              <textarea
-                value={diffB}
-                onChange={e => setDiffB(e.target.value)}
-                placeholder={t('textarea.placeholder')}
-                spellCheck={false}
-              />
+              <div className="panel-header"><span>{t('panel.json_b')}</span></div>
+              <textarea value={diffB} onChange={e => setDiffB(e.target.value)} placeholder={t('textarea.placeholder')} spellCheck={false} />
             </div>
           </div>
 
-          {/* Diff result */}
           {diffResult !== null && (
             <div className="diff-result">
               {diffResult.length === 0 ? (
@@ -580,7 +694,67 @@ function App() {
         </div>
       )}
 
-      {/* Stats */}
+      {/* ===== JSONPath mode ===== */}
+      {mode === 'jsonpath' && (
+        <div className="jp-section">
+          <div className="diff-toolbar">
+            <button className="btn btn-outline" onClick={handleExitJP}>{t('jsonpath.back')}</button>
+          </div>
+
+          <div className="editor-area">
+            <div className="editor-panel">
+              <div className="panel-header"><span>{t('panel.input')}</span></div>
+              <textarea
+                value={input}
+                onChange={handleInputChange}
+                placeholder={t('textarea.placeholder')}
+                spellCheck={false}
+              />
+            </div>
+            <div className="editor-panel">
+              <div className="panel-header"><span>{t('panel.jsonpath_expr')}</span></div>
+              <div className="jp-expr-area">
+                <input
+                  className="jp-expr-input"
+                  value={jpExpr}
+                  onChange={e => setJpExpr(e.target.value)}
+                  onKeyDown={handleJPKeyDown}
+                  placeholder={t('textarea.jsonpath_placeholder')}
+                />
+                <button className="btn btn-purple jp-query-btn" onClick={handleJPQuery}>
+                  {t('jsonpath.query_btn')}
+                </button>
+              </div>
+              <div className="jp-result-header">{t('jsonpath.result')}</div>
+              <div className="output-area">
+                {jpResult || <span className="output-hint">{t('textarea.output_diff_hint')}</span>}
+              </div>
+            </div>
+          </div>
+
+          <div className="jp-help">
+            <details>
+              <summary>JSONPath Quick Reference</summary>
+              <div className="jp-help-content">
+                <code>$</code> — root<br/>
+                <code>.key</code> — child property<br/>
+                <code>[*]</code> — all array elements<br/>
+                <code>[0]</code> — array index<br/>
+                <code>[0:3]</code> — array slice<br/>
+                <code>[?(@.price&lt;10)]</code> — filter expression<br/>
+                <code>..name</code> — recursive descent<br/>
+                <br/>
+                Examples:<br/>
+                <code>$.store.book[*].author</code><br/>
+                <code>$..price</code><br/>
+                <code>$..book[?(@.price&gt;=10)]</code>
+              </div>
+            </details>
+          </div>
+        </div>
+      )}
+
+      {/* ===== Stats (normal mode only) ===== */}
       {mode === 'normal' && (
         <div className="stats-bar">
           <span>📊 {t('stats.chars')}: {charCount}</span>
