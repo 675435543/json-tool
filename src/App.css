@@ -413,6 +413,17 @@ header h1 {
   white-space: nowrap;
 }
 
+.lang-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--purple);
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
 .view-toggle:hover {
   background: var(--bg-hover);
   color: var(--text-primary);

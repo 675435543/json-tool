@@ -216,6 +216,7 @@ function App() {
   const [dragOver, setDragOver] = useState(false)
   const [mode, setMode] = useState<'normal' | 'diff' | 'jsonpath' | 'privacy' | 'contact' | 'jwt' | 'yaml' | 'generator'>('normal')
   const [viewMode, setViewMode] = useState<'text' | 'tree'>('text')
+  const [generatedLang, setGeneratedLang] = useState('')
   const [diffA, setDiffA] = useState('')
   const [diffB, setDiffB] = useState('')
   const [diffResult, setDiffResult] = useState<DiffEntry[] | null>(null)
@@ -414,6 +415,7 @@ function App() {
     setCharCount(0)
     setLineCount(0)
     setViewMode('text')
+    setGeneratedLang('')
   }, [])
 
   const handleCopy = useCallback(() => {
@@ -465,8 +467,8 @@ function App() {
       return
     }
     const generated = entry.generate(parsed, 'Root')
-    const footer = `\n${entry.commentPrefix} Generated as: ${t(entry.labelKey)}\n`
-    setOutput(generated + footer)
+    setOutput(generated)
+    setGeneratedLang(t(entry.labelKey))
     setErrorInfo('')
     showToast('success', t('toast.codegen_success'))
     updateStats(generated)
@@ -909,6 +911,7 @@ function App() {
             <div className="panel-header">
               <span>{t('panel.output')}</span>
               <div className="panel-header-right">
+                {generatedLang && <span className="lang-tag">{generatedLang}</span>}
                 {output && (() => {
                   try { JSON.parse(output.trim()); return true } catch { return false }
                 })() && (
