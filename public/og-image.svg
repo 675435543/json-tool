@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    <linearGradient id="title" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#38bdf8"/>
+      <stop offset="100%" style="stop-color:#818cf8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="60" y="60" width="1080" height="510" rx="16" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+  <text x="600" y="140" font-family="system-ui,sans-serif" font-size="52" font-weight="bold" text-anchor="middle" fill="url(#title)">JSON Tool Pro</text>
+  <text x="600" y="190" font-family="system-ui,sans-serif" font-size="22" fill="#94a3b8" text-anchor="middle">Free Online JSON Formatter, Validator &amp; Converter</text>
+  <rect x="100" y="230" width="480" height="40" rx="8" fill="#334155"/>
+  <text x="120" y="256" font-family="monospace" font-size="16" fill="#e2e8f0">Format · Validate · Minify · Diff</text>
+  <rect x="100" y="290" width="480" height="200" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="120" y="322" font-family="monospace" font-size="14" fill="#818cf8">{</text>
+  <text x="120" y="346" font-family="monospace" font-size="14" fill="#94a3b8">  "name":<tspan fill="#86efac"> "JSON Tool"</tspan>,</text>
+  <text x="120" y="370" font-family="monospace" font-size="14" fill="#94a3b8">  "version":<tspan fill="#67e8f9"> 1.0</tspan>,</text>
+  <text x="120" y="394" font-family="monospace" font-size="14" fill="#94a3b8">  "features":<tspan fill="#86efac"> ["format","validate","diff"]</tspan></text>
+  <text x="120" y="418" font-family="monospace" font-size="14" fill="#818cf8">}</text>
+  <rect x="620" y="230" width="480" height="40" rx="8" fill="#334155"/>
+  <text x="640" y="256" font-family="monospace" font-size="16" fill="#e2e8f0">To CSV · Java POJO · TypeScript</text>
+  <rect x="620" y="290" width="480" height="200" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="640" y="322" font-family="monospace" font-size="14" fill="#818cf8">{</text>
+  <text x="640" y="346" font-family="monospace" font-size="14" fill="#94a3b8">  "name":<tspan fill="#86efac"> "JSON Tool"</tspan>,</text>
+  <text x="640" y="370" font-family="monospace" font-size="14" fill="#94a3b8">  "version":<tspan fill="#67e8f9"> 2.0</tspan>,</text>
+  <text x="640" y="394" font-family="monospace" font-size="14" fill="#94a3b8">  "status":<tspan fill="#fde68a"> true</tspan></text>
+  <text x="640" y="418" font-family="monospace" font-size="14" fill="#818cf8">}</text>
+  <rect x="100" y="520" width="200" height="36" rx="18" fill="#3b82f6"/>
+  <text x="200" y="544" font-family="system-ui,sans-serif" font-size="16" fill="white" text-anchor="middle" font-weight="600">Try it Free →</text>
+  <text x="600" y="544" font-family="system-ui,sans-serif" font-size="14" fill="#64748b" text-anchor="middle">Pure frontend · No server · Free · Open Source</text>
+</svg>
