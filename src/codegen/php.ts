@@ -7,8 +7,6 @@ function phpType(val: any): string {
   if (typeof val === 'boolean') return 'bool'
   if (Array.isArray(val)) {
     if (val.length === 0) return 'array'
-    const inners = val.map(v => phpType(v))
-    const inner = inners.every(t => t === inners[0]) ? inners[0] : 'mixed'
     return `array`
   }
   return 'mixed'

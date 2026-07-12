@@ -1,4 +1,4 @@
-import { toPascalCase, toFieldName } from './utils'
+import { toPascalCase } from './utils'
 
 function goType(val: any): string {
   if (val === null || val === undefined) return 'interface{}'
@@ -15,7 +15,6 @@ function goType(val: any): string {
 }
 
 export function generateGo(obj: any, rootName: string): string {
-  const lines: string[] = []
   const structs: string[] = []
 
   function process(obj: any, name: string): void {

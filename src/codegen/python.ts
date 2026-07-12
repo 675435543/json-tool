@@ -15,7 +15,6 @@ function pyType(val: any): string {
 }
 
 export function generatePython(obj: any, rootName: string): string {
-  const lines: string[] = []
   const classes: string[] = []
 
   function process(obj: any, name: string): void {

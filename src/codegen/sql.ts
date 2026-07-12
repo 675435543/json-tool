@@ -1,4 +1,4 @@
-import { toFieldName, toTypeName } from './utils'
+import { toFieldName } from './utils'
 
 function sqlType(val: any, isPrimary?: boolean): string {
   if (isPrimary) return 'INTEGER PRIMARY KEY AUTOINCREMENT'
