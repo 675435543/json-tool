@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSON 是什么？新手入门指南 - JSON Tool Pro</title>
+    <meta name="description" content="JSON 是一种轻量级的数据交换格式，本文带你了解 JSON 的基本语法、数据类型和使用场景，适合编程新手阅读。" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://jsonprocess.app/blog/json-intro.html" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #0f172a; color: #e2e8f0; line-height: 1.8; padding: 40px 16px;
+      }
+      .container { max-width: 800px; margin: 0 auto; }
+      .content { background: #1e293b; border-radius: 12px; padding: 32px; }
+      h1 { font-size: 28px; margin-bottom: 8px; color: #f1f5f9; }
+      .meta { font-size: 13px; color: #64748b; margin-bottom: 24px; }
+      h2 { font-size: 20px; margin-top: 32px; margin-bottom: 12px; color: #e2e8f0; border-bottom: 1px solid #334155; padding-bottom: 8px; }
+      p { font-size: 15px; color: #94a3b8; margin-bottom: 16px; }
+      pre {
+        background: #0f172a; border: 1px solid #334155; border-radius: 8px;
+        padding: 16px; overflow-x: auto; font-size: 14px; color: #e2e8f0; margin-bottom: 16px;
+      }
+      code { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+      ul, ol { color: #94a3b8; margin-bottom: 16px; padding-left: 24px; }
+      li { margin-bottom: 8px; font-size: 15px; }
+      a { color: #60a5fa; }
+      .back { display: inline-block; margin-bottom: 16px; color: #60a5fa; text-decoration: underline; font-size: 14px; }
+      .tool-link { display: inline-block; margin-top: 24px; background: #3b82f6; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+      .tool-link:hover { background: #2563eb; }
+      footer { text-align: center; margin-top: 48px; font-size: 13px; color: #475569; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="/" class="back">← 返回 JSON Tool Pro</a>
+      <div class="content">
+        <h1>JSON 是什么？新手入门指南</h1>
+        <p class="meta">2026 年 7 月 12 日 · 3 分钟阅读</p>
+
+        <h2>什么是 JSON？</h2>
+        <p>JSON（JavaScript Object Notation）是一种轻量级的数据交换格式。它基于 JavaScript 语法，但被几乎所有编程语言支持，包括 Java、Python、PHP、C# 等。</p>
+        <p>简单来说，JSON 就是用一种所有人都能看懂的方式来表示数据，方便不同系统之间传递信息。</p>
+
+        <h2>一个最简单的 JSON 例子</h2>
+        <pre>{
+  "name": "张三",
+  "age": 25,
+  "isStudent": false,
+  "hobbies": ["读书", "编程", "跑步"]
+}</pre>
+        <p>这个 JSON 描述了一个人的基本信息：名字、年龄、是否为学生、以及兴趣爱好。是不是一眼就能看懂？</p>
+
+        <h2>JSON 的六种数据类型</h2>
+        <ul>
+          <li><strong>字符串</strong>：用双引号包裹的文字，如 <code>"hello"</code></li>
+          <li><strong>数字</strong>：整数或小数，如 <code>42</code> 或 <code>3.14</code></li>
+          <li><strong>布尔值</strong>：<code>true</code> 或 <code>false</code></li>
+          <li><strong>数组</strong>：用方括号包裹的值列表，如 <code>[1, 2, 3]</code></li>
+          <li><strong>对象</strong>：用花括号包裹的键值对集合，如 <code>{"key": "value"}</code></li>
+          <li><strong>null</strong>：表示空值</li>
+        </ul>
+
+        <h2>JSON 的语法规则</h2>
+        <ul>
+          <li>键名必须用双引号包裹（不能用单引号）</li>
+          <li>字符串必须用双引号</li>
+          <li>对象和数组可以任意嵌套</li>
+          <li>最后一个键值对后面不能有逗号</li>
+          <li>JSON 文件通常以 <code>.json</code> 为扩展名</li>
+        </ul>
+
+        <h2>常见的 JSON 错误</h2>
+        <p>新手常犯的错误包括：</p>
+        <ul>
+          <li>多了一个逗号（trailing comma）</li>
+          <li>键名没用双引号</li>
+          <li>字符串用了单引号</li>
+          <li>布尔值写成了大写 <code>True</code>（应该小写 <code>true</code>）</li>
+        </ul>
+        <p>如果你拿不准自己的 JSON 是否正确，可以使用我们的 <a href="/">在线 JSON 校验工具</a> 一键检查。</p>
+
+        <h2>JSON 有什么用途？</h2>
+        <ul>
+          <li><strong>前后端通信</strong>：网页和服务器之间传数据，目前最主流的方式</li>
+          <li><strong>配置文件</strong>：很多软件用 JSON 作为配置文件格式</li>
+          <li><strong>数据存储</strong>：NoSQL 数据库（如 MongoDB）直接使用 JSON 格式</li>
+          <li><strong>API 数据交换</strong>：几乎所有开放 API 都返回 JSON 格式数据</li>
+        </ul>
+
+        <h2>为什么 JSON 这么流行？</h2>
+        <p>相比 XML，JSON 更简洁、更易读。同样的一段数据，JSON 比 XML 少写一半字符，可读性也高得多。这也是为什么现在的 Web API 几乎都选择 JSON 而不是 XML。</p>
+
+        <a href="/" class="tool-link">🔧 试试 JSON 格式化工具</a>
+      </div>
+      <footer>JSON Tool Pro · 免费在线工具 · 2026</footer>
+    </div>
+  </body>
+</html>

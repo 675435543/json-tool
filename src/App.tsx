@@ -213,7 +213,7 @@ function App() {
   const [charCount, setCharCount] = useState(0)
   const [lineCount, setLineCount] = useState(0)
   const [dragOver, setDragOver] = useState(false)
-  const [mode, setMode] = useState<'normal' | 'diff' | 'jsonpath' | 'privacy' | 'contact'>('normal')
+  const [mode, setMode] = useState<'normal' | 'diff' | 'jsonpath' | 'privacy' | 'contact' | 'jwt' | 'yaml' | 'generator'>('normal')
   const [viewMode, setViewMode] = useState<'text' | 'tree'>('text')
   const [diffA, setDiffA] = useState('')
   const [diffB, setDiffB] = useState('')
@@ -221,6 +221,12 @@ function App() {
   const [jpExpr, setJpExpr] = useState('')
   const [jpResult, setJpResult] = useState<string>('')
   const [langOpen, setLangOpen] = useState(false)
+  const [jwtInput, setJwtInput] = useState('')
+  const [jwtResult, setJwtResult] = useState('')
+  const [yamlInput, setYamlInput] = useState('')
+  const [yamlResult, setYamlResult] = useState('')
+  const [genCount, setGenCount] = useState(3)
+  const [genResult, setGenResult] = useState('')
 
   const goHome = () => setMode('normal')
 
@@ -521,6 +527,120 @@ function App() {
     if (e.key === 'Enter') handleJPQuery()
   }, [handleJPQuery])
 
+  // ========== JWT Decode ==========
+  const handleJWTMode = useCallback(() => {
+    setMode('jwt')
+    setJwtInput('')
+    setJwtResult('')
+  }, [])
+
+  const handleJWTDecode = useCallback(() => {
+    const trimmed = jwtInput.trim()
+    if (!trimmed) { showToast('error', t('toast.input.empty')); return }
+    try {
+      const parts = trimmed.split('.')
+      if (parts.length !== 3) { showToast('error', 'Invalid JWT format'); return }
+      const header = JSON.parse(atob(parts[0].replace(/-/g, '+').replace(/_/g, '/')))
+      const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')))
+      setJwtResult(JSON.stringify({ header, payload, signature: parts[2] + '...' }, null, 2))
+    } catch {
+      showToast('error', 'Failed to decode JWT')
+    }
+  }, [jwtInput, t])
+
+  const handleJWTBack = useCallback(() => {
+    setMode('normal')
+    setJwtInput('')
+    setJwtResult('')
+  }, [])
+
+  // ========== JSON to YAML ==========
+  function jsonToYaml(obj: any, indent: number): string {
+    if (obj === null || obj === undefined) return 'null'
+    if (typeof obj === 'string') return `"${obj.replace(/"/g, '\\"')}"`
+    if (typeof obj === 'number' || typeof obj === 'boolean') return String(obj)
+    if (Array.isArray(obj)) {
+      if (obj.length === 0) return '[]'
+      return obj.map(item => {
+        if (typeof item === 'object' && item !== null) {
+          const lines = jsonToYaml(item, indent + 2).split('\n')
+          return '- ' + lines[0] + '\n' + lines.slice(1).map(l => '  ' + l).join('\n')
+        }
+        return '- ' + jsonToYaml(item, indent)
+      }).join('\n')
+    }
+    if (typeof obj === 'object') {
+      const keys = Object.keys(obj)
+      if (keys.length === 0) return '{}'
+      return keys.map(key => {
+        const val = obj[key]
+        const yv = jsonToYaml(val, indent + 2)
+        if (typeof val === 'object' && val !== null && !Array.isArray(val)) {
+          const lines = yv.split('\n')
+          return key + ':\n' + lines.map(l => '  ' + l).join('\n')
+        } else if (Array.isArray(val) && val.length > 0 && typeof val[0] === 'object') {
+          return key + ':\n' + yv.split('\n').map(l => '  ' + l).join('\n')
+        }
+        return key + ': ' + yv
+      }).join('\n')
+    }
+    return String(obj)
+  }
+
+  const handleYAMLMode = useCallback(() => {
+    setMode('yaml')
+    setYamlInput('')
+    setYamlResult('')
+  }, [])
+
+  const handleYAMLConvert = useCallback(() => {
+    const trimmed = yamlInput.trim()
+    if (!trimmed) { showToast('error', t('toast.input.empty')); return }
+    try {
+      const parsed = JSON.parse(trimmed)
+      setYamlResult(jsonToYaml(parsed, 0))
+    } catch {
+      showToast('error', t('toast.invalid'))
+    }
+  }, [yamlInput, t])
+
+  const handleYAMLBack = useCallback(() => {
+    setMode('normal')
+    setYamlInput('')
+    setYamlResult('')
+  }, [])
+
+  // ========== JSON Generator ==========
+  const handleGenMode = useCallback(() => {
+    setMode('generator')
+    setGenCount(3)
+    setGenResult('')
+  }, [])
+
+  const handleGenerate = useCallback(() => {
+    const count = Math.max(1, Math.min(100, genCount))
+    const names = ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank', 'Grace', 'Henry', 'Ivy', 'Jack', 'Kevin', 'Lucy', 'Mike', 'Nina', 'Oscar', 'Paul', 'Quinn', 'Rose', 'Sam', 'Tina']
+    const cities = ['Beijing', 'Shanghai', 'Shenzhen', 'Guangzhou', 'Hangzhou', 'Wuhan', 'Chengdu', 'Nanjing']
+    const result: any[] = []
+    for (let i = 0; i < count; i++) {
+      result.push({
+        id: i + 1,
+        name: names[Math.floor(Math.random() * names.length)],
+        age: Math.floor(Math.random() * 40) + 18,
+        city: cities[Math.floor(Math.random() * cities.length)],
+        active: Math.random() > 0.3,
+        score: Math.round(Math.random() * 10000) / 100
+      })
+    }
+    setGenResult(JSON.stringify(count === 1 ? result[0] : result, null, 2))
+  }, [genCount])
+
+  const handleGenBack = useCallback(() => {
+    setMode('normal')
+    setGenCount(3)
+    setGenResult('')
+  }, [])
+
   // ========== Input change ==========
 
   const handleInputChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -618,6 +738,9 @@ function App() {
           <div className="toolbar-group">
             <button className="btn btn-purple" onClick={handleJPMode}>{t('btn.jsonpath')}</button>
             <button className="btn btn-purple" onClick={handleDiffMode}>{t('btn.diff')}</button>
+            <button className="btn btn-purple" onClick={handleJWTMode}>{t('btn.jwt_decode')}</button>
+            <button className="btn btn-purple" onClick={handleYAMLMode}>{t('btn.to_yaml')}</button>
+            <button className="btn btn-purple" onClick={handleGenMode}>{t('btn.generator')}</button>
           </div>
           <div className="toolbar-group">
             <button className="btn btn-outline" onClick={handleSwap}>{t('btn.swap')}</button>
@@ -802,6 +925,73 @@ function App() {
         </div>
       )}
 
+      {/* ===== JWT Decode mode ===== */}
+      {mode === 'jwt' && (
+        <div className="jp-section">
+          <div className="diff-toolbar">
+            <button className="btn btn-outline" onClick={handleJWTBack}>{t('jwt.back')}</button>
+            <button className="btn btn-purple" onClick={handleJWTDecode}>🔓 {t('jwt.decode')}</button>
+          </div>
+          <div className="editor-area">
+            <div className="editor-panel">
+              <div className="panel-header"><span>{t('jwt.input')}</span></div>
+              <textarea value={jwtInput} onChange={e => setJwtInput(e.target.value)} placeholder={t('jwt.placeholder')} spellCheck={false} />
+            </div>
+            <div className="editor-panel">
+              <div className="panel-header"><span>{t('jwt.result')}</span></div>
+              <div className="output-area">{jwtResult || <span className="output-hint">{t('jwt.hint')}</span>}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== YAML mode ===== */}
+      {mode === 'yaml' && (
+        <div className="jp-section">
+          <div className="diff-toolbar">
+            <button className="btn btn-outline" onClick={handleYAMLBack}>{t('yaml.back')}</button>
+            <button className="btn btn-purple" onClick={handleYAMLConvert}>🔄 {t('yaml.convert')}</button>
+          </div>
+          <div className="editor-area">
+            <div className="editor-panel">
+              <div className="panel-header"><span>{t('panel.input')}</span></div>
+              <textarea value={yamlInput} onChange={e => setYamlInput(e.target.value)} placeholder={t('textarea.placeholder')} spellCheck={false} />
+            </div>
+            <div className="editor-panel">
+              <div className="panel-header"><span>{t('yaml.output')}</span></div>
+              <div className="output-area">{yamlResult || <span className="output-hint">{t('yaml.hint')}</span>}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== Generator mode ===== */}
+      {mode === 'generator' && (
+        <div className="jp-section">
+          <div className="diff-toolbar">
+            <button className="btn btn-outline" onClick={handleGenBack}>{t('gen.back')}</button>
+          </div>
+          <div className="gen-area" style={{ padding: '16px', background: '#1e293b', borderRadius: '12px' }}>
+            <label style={{ color: '#94a3b8', fontSize: '14px', marginRight: '12px' }}>{t('gen.count')}</label>
+            <input
+              type="number" min="1" max="100" value={genCount}
+              onChange={e => setGenCount(Number(e.target.value))}
+              style={{
+                background: '#0f172a', border: '1px solid #334155', borderRadius: '8px',
+                color: '#e2e8f0', padding: '8px 12px', fontSize: '14px', width: '80px', marginRight: '12px'
+              }}
+            />
+            <button className="btn btn-purple" onClick={handleGenerate}>⚡ {t('gen.generate')}</button>
+          </div>
+          <div className="editor-area" style={{ marginTop: '0' }}>
+            <div className="editor-panel">
+              <div className="panel-header"><span>{t('gen.result')}</span></div>
+              <div className="output-area">{genResult || <span className="output-hint">{t('gen.hint')}</span>}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {mode === 'privacy' && (
         <div className="page-content">
           <button className="btn btn-outline" onClick={goHome} style={{ marginBottom: '1rem' }}>← {t('btn.back')}</button>
@@ -837,6 +1027,8 @@ function App() {
 
       <footer>
         <div className="footer-links">
+          <a className="footer-link" href="/blog/json-intro.html">{t('footer.blog')}</a>
+          <span className="footer-sep">·</span>
           <a className="footer-link" href="/privacy.html">{t('footer.privacy')}</a>
           <span className="footer-sep">·</span>
           <a className="footer-link" href="/contact.html">{t('footer.contact')}</a>

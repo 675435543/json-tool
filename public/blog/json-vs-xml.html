@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSON vs XML，到底选哪个？ - JSON Tool Pro</title>
+    <meta name="description" content="JSON 和 XML 都是常用的数据格式，本文从可读性、性能、兼容性等角度对比两者，帮你选择最适合的数据交换格式。" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://jsonprocess.app/blog/json-vs-xml.html" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #0f172a; color: #e2e8f0; line-height: 1.8; padding: 40px 16px;
+      }
+      .container { max-width: 800px; margin: 0 auto; }
+      .content { background: #1e293b; border-radius: 12px; padding: 32px; }
+      h1 { font-size: 28px; margin-bottom: 8px; color: #f1f5f9; }
+      .meta { font-size: 13px; color: #64748b; margin-bottom: 24px; }
+      h2 { font-size: 20px; margin-top: 32px; margin-bottom: 12px; color: #e2e8f0; border-bottom: 1px solid #334155; padding-bottom: 8px; }
+      p { font-size: 15px; color: #94a3b8; margin-bottom: 16px; }
+      pre {
+        background: #0f172a; border: 1px solid #334155; border-radius: 8px;
+        padding: 16px; overflow-x: auto; font-size: 14px; color: #e2e8f0; margin-bottom: 16px;
+      }
+      code { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+      table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 14px; }
+      th, td { border: 1px solid #334155; padding: 10px 14px; text-align: left; color: #94a3b8; }
+      th { background: #0f172a; color: #e2e8f0; font-weight: 600; }
+      ul { color: #94a3b8; margin-bottom: 16px; padding-left: 24px; }
+      li { margin-bottom: 8px; font-size: 15px; }
+      a { color: #60a5fa; }
+      .back { display: inline-block; margin-bottom: 16px; color: #60a5fa; text-decoration: underline; font-size: 14px; }
+      .tool-link { display: inline-block; margin-top: 24px; background: #3b82f6; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+      .tool-link:hover { background: #2563eb; }
+      footer { text-align: center; margin-top: 48px; font-size: 13px; color: #475569; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="/" class="back">← 返回 JSON Tool Pro</a>
+      <div class="content">
+        <h1>JSON vs XML，到底选哪个？</h1>
+        <p class="meta">2026 年 7 月 12 日 · 4 分钟阅读</p>
+
+        <h2>从一段数据说起</h2>
+        <p>假设我们要表示一个图书馆的书籍信息，分别用 JSON 和 XML 来写：</p>
+
+        <p><strong>JSON 写法：</strong></p>
+        <pre>{
+  "library": {
+    "name": "社区图书馆",
+    "books": [
+      { "title": "JSON 入门", "price": 29.9 },
+      { "title": "XML 入门", "price": 35.0 }
+    ]
+  }
+}</pre>
+
+        <p><strong>XML 写法：</strong></p>
+        <pre>&lt;library&gt;
+  &lt;name&gt;社区图书馆&lt;/name&gt;
+  &lt;books&gt;
+    &lt;book&gt;
+      &lt;title&gt;JSON 入门&lt;/title&gt;
+      &lt;price&gt;29.9&lt;/price&gt;
+    &lt;/book&gt;
+    &lt;book&gt;
+      &lt;title&gt;XML 入门&lt;/title&gt;
+      &lt;price&gt;35.0&lt;/price&gt;
+    &lt;/book&gt;
+  &lt;/books&gt;
+&lt;/library&gt;</pre>
+
+        <p>一眼就能看出来：JSON 更简洁。</p>
+
+        <h2>全方位对比</h2>
+        <table>
+          <tr>
+            <th>对比项</th>
+            <th>JSON</th>
+            <th>XML</th>
+          </tr>
+          <tr>
+            <td>可读性</td>
+            <td>⭐⭐⭐⭐⭐ 简洁明了</td>
+            <td>⭐⭐⭐ 标签多显得臃肿</td>
+          </tr>
+          <tr>
+            <td>数据体积</td>
+            <td>小（无关闭标签）</td>
+            <td>大（每个字段都要开始和结束标签）</td>
+          </tr>
+          <tr>
+            <td>解析速度</td>
+            <td>快</td>
+            <td>较慢</td>
+          </tr>
+          <tr>
+            <td>JavaScript 支持</td>
+            <td>原生支持，一行代码解析</td>
+            <td>需要额外的解析器</td>
+          </tr>
+          <tr>
+            <td>注释支持</td>
+            <td>❌ 不支持</td>
+            <td>✅ 支持</td>
+          </tr>
+          <tr>
+            <td>属性（Attributes）</td>
+            <td>❌ 不支持</td>
+            <td>✅ 支持</td>
+          </tr>
+          <tr>
+            <td>命名空间</td>
+            <td>❌ 不支持</td>
+            <td>✅ 支持</td>
+          </tr>
+          <tr>
+            <td>Schema 验证</td>
+            <td>通过 JSON Schema</td>
+            <td>通过 XSD</td>
+          </tr>
+        </table>
+
+        <h2>什么时候用 JSON？</h2>
+        <ul>
+          <li>Web API / RESTful 接口 — 这已经是行业标准</li>
+          <li>前后端数据通信</li>
+          <li>移动 App 数据交换</li>
+          <li>配置文件（很多现代工具都用 JSON 做配置）</li>
+          <li>NoSQL 数据库</li>
+        </ul>
+
+        <h2>什么时候用 XML？</h2>
+        <ul>
+          <li>需要注释的配置文件</li>
+          <li>复杂的文档标记（如 XHTML、SVG）</li>
+          <li>金融、医疗等行业的标准化数据交换</li>
+          <li>Android 布局文件</li>
+          <li>SOAP 协议（老旧系统）</li>
+        </ul>
+
+        <h2>结论</h2>
+        <p>对于 90% 的 Web 开发场景，<strong>JSON 是更好的选择</strong>。它更轻量、更快速、更易读。XML 在特定领域仍有其价值，但如果是新项目，除非有特殊需求（如需要注释或命名空间），否则选 JSON 基本没错。</p>
+
+        <p>如果你的数据已经存为 JSON，但需要转成其他格式，试试我们的 <a href="/">JSON 在线工具</a>，支持格式化、校验、转 CSV、转 Java POJO 等。</p>
+
+        <a href="/" class="tool-link">🔧 使用 JSON 在线工具</a>
+      </div>
+      <footer>JSON Tool Pro · 免费在线工具 · 2026</footer>
+    </div>
+  </body>
+</html>
