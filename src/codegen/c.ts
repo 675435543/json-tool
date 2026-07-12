@@ -2,7 +2,7 @@ import { toPascalCase, toFieldName, toTypeName } from './utils'
 
 function cType(val: any): string {
   if (val === null || val === undefined) return 'char*'
-  if (typeof val === 'string') return 'char*'
+  if (typeof val === 'string') return 'char[256]'
   if (typeof val === 'number') return Number.isInteger(val) ? 'int' : 'double'
   if (typeof val === 'boolean') return 'int'
   if (Array.isArray(val) || typeof val === 'object') return '/* nested type */'

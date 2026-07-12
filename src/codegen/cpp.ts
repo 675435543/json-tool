@@ -1,17 +1,17 @@
 import { toPascalCase, toFieldName, toTypeName } from './utils'
 
 function cppType(val: any): string {
-  if (val === null || val === undefined) return 'std::any'
+  if (val === null || val === undefined) return '/* unknown */'
   if (typeof val === 'string') return 'std::string'
   if (typeof val === 'number') return Number.isInteger(val) ? 'int' : 'double'
   if (typeof val === 'boolean') return 'bool'
   if (Array.isArray(val)) {
-    if (val.length === 0) return 'std::vector<std::any>'
+    if (val.length === 0) return 'std::vector</* unknown */>'
     const inners = val.map(v => cppType(v))
-    const inner = inners.every(t => t === inners[0]) ? inners[0] : 'std::any'
+    const inner = inners.every(t => t === inners[0]) ? inners[0] : '/* unknown */'
     return `std::vector<${inner}>`
   }
-  return 'std::any'
+  return '/* unknown */'
 }
 
 export function generateCpp(obj: any, rootName: string): string {
@@ -48,5 +48,5 @@ export function generateCpp(obj: any, rootName: string): string {
   }
 
   process(obj, toTypeName(rootName))
-  return `#include <string>\n#include <vector>\n#include <any>\n\n${structs.join('\n').trim()}`
+  return `#include <string>\n#include <vector>\n\n${structs.join('\n').trim()}`
 }

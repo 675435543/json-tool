@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect, type DragEvent, type ChangeEv
 import { useTranslation } from 'react-i18next'
 import { JSONPath } from 'jsonpath-plus'
 import TreeView from './TreeView'
-import { codegenLanguages, type CodegenEntry } from './codegen'
+import { codegenLanguages, sqlDialects, type CodegenEntry } from './codegen'
 import './App.css'
 
 // ============ JSON → Java POJO ============
@@ -235,6 +235,7 @@ function App() {
 
   const [langOpen, setLangOpen] = useState(false)
   const [codegenOpen, setCodegenOpen] = useState(false)
+  const [sqlOpen, setSqlOpen] = useState(false)
   const [jwtInput, setJwtInput] = useState('')
   const [jwtResult, setJwtResult] = useState('')
   const [yamlInput, setYamlInput] = useState('')
@@ -249,6 +250,7 @@ function App() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const langRef = useRef<HTMLDivElement>(null)
   const codegenRef = useRef<HTMLDivElement>(null)
+  const sqlRef = useRef<HTMLDivElement>(null)
 
   // ========== Toast ==========
 
@@ -453,6 +455,7 @@ function App() {
 
   const handleCodegenSelect = useCallback((entry: CodegenEntry) => {
     setCodegenOpen(false)
+    setSqlOpen(false)
     const trimmed = input.trim()
     if (!trimmed) { showToast('error', t('toast.input.empty')); return }
     let parsed: any
@@ -462,10 +465,73 @@ function App() {
       return
     }
     const generated = entry.generate(parsed, 'Root')
-    setOutput(generated)
+    const footer = `\n${entry.commentPrefix} Generated as: ${t(entry.labelKey)}\n`
+    setOutput(generated + footer)
     setErrorInfo('')
     showToast('success', t('toast.codegen_success'))
     updateStats(generated)
+  }, [input, showToast, updateStats, t])
+
+  const handleSQLSelect = useCallback((entry: CodegenEntry) => {
+    setSqlOpen(false)
+    setCodegenOpen(false)
+    const trimmed = input.trim()
+    if (!trimmed) { showToast('error', t('toast.input.empty')); return }
+    let parsed: any
+    try { parsed = JSON.parse(trimmed) } catch { showToast('error', t('toast.invalid')); return }
+    if (typeof parsed !== 'object' || parsed === null) {
+      showToast('error', t('toast.codegen_fail'))
+      return
+    }
+    const generated = entry.generate(parsed, 'TableName')
+    const footer = `\n${entry.commentPrefix} Generated as: ${t(entry.labelKey)}\n`
+    setOutput(generated + footer)
+    setErrorInfo('')
+    showToast('success', t('toast.codegen_success'))
+    updateStats(generated)
+  }, [input, showToast, updateStats, t])
+
+  // ========== Base64 ==========
+
+  const handleToBase64 = useCallback(() => {
+    const trimmed = input.trim()
+    if (!trimmed) { showToast('error', t('toast.input.empty')); return }
+    // Validate JSON first
+    try { JSON.parse(trimmed) } catch { showToast('error', t('toast.invalid')); return }
+    try {
+      const encoded = btoa(trimmed)
+      setOutput(encoded)
+      setErrorInfo('')
+      showToast('success', t('toast.base64_encoded'))
+      updateStats(encoded)
+    } catch {
+      showToast('error', t('toast.base64_fail'))
+    }
+  }, [input, showToast, updateStats, t])
+
+  const handleFromBase64 = useCallback(() => {
+    const trimmed = input.trim()
+    if (!trimmed) { showToast('error', t('toast.input.empty')); return }
+    try {
+      const decoded = atob(trimmed)
+      // Validate the result is valid JSON and format it
+      try {
+        const parsed = JSON.parse(decoded)
+        const formatted = JSON.stringify(parsed, null, 2)
+        setOutput(formatted)
+        setErrorInfo('')
+        showToast('success', t('toast.base64_decoded'))
+        updateStats(formatted)
+      } catch {
+        // Valid Base64 but not JSON — still show the decoded string
+        setOutput(decoded)
+        setErrorInfo('')
+        showToast('success', t('toast.base64_decoded'))
+        updateStats(decoded)
+      }
+    } catch {
+      showToast('error', t('toast.base64_invalid'))
+    }
   }, [input, showToast, updateStats, t])
 
   // ========== JSON → TypeScript ==========
@@ -711,6 +777,7 @@ function App() {
     const handler = (e: MouseEvent) => {
       if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false)
       if (codegenRef.current && !codegenRef.current.contains(e.target as Node)) setCodegenOpen(false)
+      if (sqlRef.current && !sqlRef.current.contains(e.target as Node)) setSqlOpen(false)
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
@@ -770,6 +837,8 @@ function App() {
           <div className="toolbar-group">
             <button className="btn btn-purple" onClick={handleToCSV}>{t('btn.to_csv')}</button>
             <button className="btn btn-outline" onClick={handleEscape}>{t('btn.escape')}</button>
+            <button className="btn btn-purple" onClick={handleToBase64}>{t('btn.to_base64')}</button>
+            <button className="btn btn-purple" onClick={handleFromBase64}>{t('btn.from_base64')}</button>
             <button className="btn btn-purple" onClick={handleToJavaPOJO}>{t('btn.java_pojo')}</button>
             <button className="btn btn-purple" onClick={handleToTypeScript}>{t('btn.to_typescript')}</button>
             <div className="codegen-wrap" ref={codegenRef}>
@@ -785,6 +854,24 @@ function App() {
                       onClick={() => handleCodegenSelect(lang)}
                     >
                       {t(lang.labelKey)}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="codegen-wrap" ref={sqlRef}>
+              <button className="btn btn-purple" onClick={() => setSqlOpen(!sqlOpen)}>
+                {t('btn.to_sql')} ▾
+              </button>
+              {sqlOpen && (
+                <div className="codegen-dropdown">
+                  {sqlDialects.map(dialect => (
+                    <button
+                      key={dialect.id}
+                      className="codegen-option"
+                      onClick={() => handleCodegenSelect(dialect)}
+                    >
+                      {t(dialect.labelKey)}
                     </button>
                   ))}
                 </div>

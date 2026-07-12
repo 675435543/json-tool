@@ -16,6 +16,7 @@ function csType(val: any): string {
 
 export function generateCSharp(obj: any, rootName: string): string {
   const classes: string[] = []
+  let needsList = false
 
   function process(obj: any, name: string): void {
     if (obj === null || typeof obj !== 'object' || Array.isArray(obj)) return
@@ -31,8 +32,11 @@ export function generateCSharp(obj: any, rootName: string): string {
       } else if (Array.isArray(val) && val.length > 0 && typeof val[0] === 'object' && val[0] !== null && !Array.isArray(val[0])) {
         const childName = name + toPascalCase(key) + 'Item'
         fields.push({ key: fname, type: `List<${childName}>`, capKey, child: { name: childName, val: val[0] } })
+        needsList = true
       } else {
-        fields.push({ key: fname, type: csType(val), capKey })
+        const type = csType(val)
+        if (type.startsWith('List<')) needsList = true
+        fields.push({ key: fname, type, capKey })
       }
     }
 
@@ -50,5 +54,6 @@ export function generateCSharp(obj: any, rootName: string): string {
   }
 
   process(obj, toTypeName(rootName))
-  return `using System.Collections.Generic;\n\n${classes.join('\n').trim()}`
+  const usings = needsList ? 'using System.Collections.Generic;\n\n' : ''
+  return usings + classes.join('\n').trim()
 }
