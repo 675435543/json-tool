@@ -814,6 +814,49 @@ footer {
   margin-right: 12px;
 }
 
+/* ===== Codegen Dropdown ===== */
+.codegen-wrap {
+  position: relative;
+}
+
+.codegen-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 100;
+  min-width: 180px;
+  max-height: 320px;
+  overflow-y: auto;
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+.codegen-option {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  padding: 10px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+.codegen-option:hover {
+  background: var(--bg-hover);
+}
+
+.codegen-option:active {
+  background: var(--bg-active);
+}
+
 /* ===== RTL support ===== */
 /* Arabic text works fine via Unicode BiDi in LTR layout.
    No dir="rtl" needed — keeps JSON/code areas intact. */

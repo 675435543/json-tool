@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect, type DragEvent, type ChangeEv
 import { useTranslation } from 'react-i18next'
 import { JSONPath } from 'jsonpath-plus'
 import TreeView from './TreeView'
+import { codegenLanguages, type CodegenEntry } from './codegen'
 import './App.css'
 
 // ============ JSON → Java POJO ============
@@ -233,6 +234,7 @@ function App() {
   }, [])
 
   const [langOpen, setLangOpen] = useState(false)
+  const [codegenOpen, setCodegenOpen] = useState(false)
   const [jwtInput, setJwtInput] = useState('')
   const [jwtResult, setJwtResult] = useState('')
   const [yamlInput, setYamlInput] = useState('')
@@ -246,6 +248,7 @@ function App() {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const langRef = useRef<HTMLDivElement>(null)
+  const codegenRef = useRef<HTMLDivElement>(null)
 
   // ========== Toast ==========
 
@@ -445,6 +448,25 @@ function App() {
     showToast('success', t('toast.java_pojo'))
     updateStats(pojo)
   }, [input, tryParseJSON, showToast, updateStats, t])
+
+  // ========== JSON → Other Code ==========
+
+  const handleCodegenSelect = useCallback((entry: CodegenEntry) => {
+    setCodegenOpen(false)
+    const trimmed = input.trim()
+    if (!trimmed) { showToast('error', t('toast.input.empty')); return }
+    let parsed: any
+    try { parsed = JSON.parse(trimmed) } catch { showToast('error', t('toast.invalid')); return }
+    if (typeof parsed !== 'object' || parsed === null) {
+      showToast('error', t('toast.codegen_fail'))
+      return
+    }
+    const generated = entry.generate(parsed, 'Root')
+    setOutput(generated)
+    setErrorInfo('')
+    showToast('success', t('toast.codegen_success'))
+    updateStats(generated)
+  }, [input, showToast, updateStats, t])
 
   // ========== JSON → TypeScript ==========
 
@@ -688,6 +710,7 @@ function App() {
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false)
+      if (codegenRef.current && !codegenRef.current.contains(e.target as Node)) setCodegenOpen(false)
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
@@ -749,6 +772,24 @@ function App() {
             <button className="btn btn-outline" onClick={handleEscape}>{t('btn.escape')}</button>
             <button className="btn btn-purple" onClick={handleToJavaPOJO}>{t('btn.java_pojo')}</button>
             <button className="btn btn-purple" onClick={handleToTypeScript}>{t('btn.to_typescript')}</button>
+            <div className="codegen-wrap" ref={codegenRef}>
+              <button className="btn btn-purple" onClick={() => setCodegenOpen(!codegenOpen)}>
+                {t('btn.to_other_code')} ▾
+              </button>
+              {codegenOpen && (
+                <div className="codegen-dropdown">
+                  {codegenLanguages.map(lang => (
+                    <button
+                      key={lang.id}
+                      className="codegen-option"
+                      onClick={() => handleCodegenSelect(lang)}
+                    >
+                      {t(lang.labelKey)}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           <div className="toolbar-group">
             <button className="btn btn-purple" onClick={handleJPMode}>{t('btn.jsonpath')}</button>
