@@ -985,7 +985,9 @@ function App() {
           </div>
           <div className="editor-area" style={{ marginTop: '0' }}>
             <div className="editor-panel">
-              <div className="panel-header"><span>{t('gen.result')}</span></div>
+              <div className="panel-header"><span>{t('gen.result')}</span>
+                {genResult && <span className="action-link" onClick={() => { navigator.clipboard.writeText(genResult).then(() => showToast('success', t('toast.copied'))).catch(() => showToast('error', t('toast.copy_fail'))) }}>📋 {t('btn.copy')}</span>}
+              </div>
               <div className="output-area">{genResult || <span className="output-hint">{t('gen.hint')}</span>}</div>
             </div>
           </div>
@@ -1027,7 +1029,7 @@ function App() {
 
       <footer>
         <div className="footer-links">
-          <a className="footer-link" href="/blog/json-intro.html">{t('footer.blog')}</a>
+          <a className="footer-link" href="/blog/">{t('footer.blog')}</a>
           <span className="footer-sep">·</span>
           <a className="footer-link" href="/privacy.html">{t('footer.privacy')}</a>
           <span className="footer-sep">·</span>
