@@ -556,6 +556,11 @@ footer {
   font-size: 13px;
   text-decoration: underline;
   padding: 0;
+  display: inline;
+}
+
+.footer-link:visited {
+  color: #60a5fa;
 }
 
 .footer-link:hover {

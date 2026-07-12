@@ -837,9 +837,9 @@ function App() {
 
       <footer>
         <div className="footer-links">
-          <button className="footer-link" onClick={() => setMode('privacy')}>{t('footer.privacy')}</button>
+          <a className="footer-link" href="/privacy.html">{t('footer.privacy')}</a>
           <span className="footer-sep">·</span>
-          <button className="footer-link" onClick={() => setMode('contact')}>{t('footer.contact')}</button>
+          <a className="footer-link" href="/contact.html">{t('footer.contact')}</a>
         </div>
         <div>{t('footer.text', { year: new Date().getFullYear() })}</div>
       </footer>
