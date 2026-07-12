@@ -57,10 +57,12 @@ export function generateSQL(obj: any, rootName: string, dialect: SqlDialect = 'm
   lines.push(`CREATE TABLE ${tableName} (`)
   lines.push(`    ${primaryKey(dialect)},`)
 
-  for (let i = 0; i < entries.length; i++) {
-    const [key, val] = entries[i]
+  const dataEntries = entries.filter(([key]) => key.toLowerCase() !== 'id')
+
+  for (let i = 0; i < dataEntries.length; i++) {
+    const [key, val] = dataEntries[i]
     const col = quoteCol(dialect, toFieldName(key).toLowerCase())
-    const isLast = i === entries.length - 1
+    const isLast = i === dataEntries.length - 1
     const type = sqlType(dialect, val)
     const nullable = val === null ? '' : ' NOT NULL'
     lines.push(`    ${col} ${type}${nullable}${isLast ? '' : ','}`)
