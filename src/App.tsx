@@ -472,25 +472,6 @@ function App() {
     updateStats(generated)
   }, [input, showToast, updateStats, t])
 
-  const handleSQLSelect = useCallback((entry: CodegenEntry) => {
-    setSqlOpen(false)
-    setCodegenOpen(false)
-    const trimmed = input.trim()
-    if (!trimmed) { showToast('error', t('toast.input.empty')); return }
-    let parsed: any
-    try { parsed = JSON.parse(trimmed) } catch { showToast('error', t('toast.invalid')); return }
-    if (typeof parsed !== 'object' || parsed === null) {
-      showToast('error', t('toast.codegen_fail'))
-      return
-    }
-    const generated = entry.generate(parsed, 'TableName')
-    const footer = `\n${entry.commentPrefix} Generated as: ${t(entry.labelKey)}\n`
-    setOutput(generated + footer)
-    setErrorInfo('')
-    showToast('success', t('toast.codegen_success'))
-    updateStats(generated)
-  }, [input, showToast, updateStats, t])
-
   // ========== Base64 ==========
 
   const handleToBase64 = useCallback(() => {
