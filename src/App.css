@@ -544,6 +544,60 @@ footer {
   color: #475569;
 }
 
+.footer-links {
+  margin-bottom: 8px;
+}
+
+.footer-link {
+  background: none;
+  border: none;
+  color: #60a5fa;
+  cursor: pointer;
+  font-size: 13px;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.footer-link:hover {
+  color: #93c5fd;
+}
+
+.footer-sep {
+  margin: 0 8px;
+  color: #475569;
+}
+
+/* ===== Page content (Privacy / Contact) ===== */
+.page-content {
+  background: #1e293b;
+  border-radius: 12px;
+  padding: 32px;
+  line-height: 1.8;
+}
+
+.page-content h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #f1f5f9;
+}
+
+.page-content h3 {
+  font-size: 18px;
+  margin-top: 24px;
+  margin-bottom: 8px;
+  color: #e2e8f0;
+}
+
+.page-content p {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-bottom: 12px;
+}
+
+.page-content a {
+  color: #60a5fa;
+}
+
 /* ===== JSONPath Mode ===== */
 .jp-section {
   margin-bottom: 12px;

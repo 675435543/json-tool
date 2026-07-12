@@ -213,7 +213,7 @@ function App() {
   const [charCount, setCharCount] = useState(0)
   const [lineCount, setLineCount] = useState(0)
   const [dragOver, setDragOver] = useState(false)
-  const [mode, setMode] = useState<'normal' | 'diff' | 'jsonpath'>('normal')
+  const [mode, setMode] = useState<'normal' | 'diff' | 'jsonpath' | 'privacy' | 'contact'>('normal')
   const [viewMode, setViewMode] = useState<'text' | 'tree'>('text')
   const [diffA, setDiffA] = useState('')
   const [diffB, setDiffB] = useState('')
@@ -221,6 +221,8 @@ function App() {
   const [jpExpr, setJpExpr] = useState('')
   const [jpResult, setJpResult] = useState<string>('')
   const [langOpen, setLangOpen] = useState(false)
+
+  const goHome = () => setMode('normal')
 
   const toastTimer = useRef<ReturnType<typeof setTimeout>>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -800,8 +802,46 @@ function App() {
         </div>
       )}
 
+      {mode === 'privacy' && (
+        <div className="page-content">
+          <button className="btn btn-outline" onClick={goHome} style={{ marginBottom: '1rem' }}>← {t('btn.back')}</button>
+          <h2>{t('privacy.title')}</h2>
+          <p><strong>{t('privacy.last_updated')}</strong></p>
+
+          <h3>{t('privacy.info_title')}</h3>
+          <p>{t('privacy.info_desc')}</p>
+
+          <h3>{t('privacy.cookies_title')}</h3>
+          <p>{t('privacy.cookies_desc')}</p>
+
+          <h3>{t('privacy.third_party_title')}</h3>
+          <p>{t('privacy.third_party_desc')}</p>
+
+          <h3>{t('privacy.ads_title')}</h3>
+          <p>{t('privacy.ads_desc')}</p>
+          <p>{t('privacy.ads_optout')}</p>
+
+          <h3>{t('privacy.contact_title')}</h3>
+          <p>{t('privacy.contact_desc')} <a href="mailto:javahiker123@gmail.com">javahiker123@gmail.com</a></p>
+        </div>
+      )}
+
+      {mode === 'contact' && (
+        <div className="page-content">
+          <button className="btn btn-outline" onClick={goHome} style={{ marginBottom: '1rem' }}>← {t('btn.back')}</button>
+          <h2>{t('contact.title')}</h2>
+          <p>{t('contact.email')}: <a href="mailto:javahiker123@gmail.com">javahiker123@gmail.com</a></p>
+          <p>{t('contact.response')}</p>
+        </div>
+      )}
+
       <footer>
-        {t('footer.text', { year: new Date().getFullYear() })}
+        <div className="footer-links">
+          <button className="footer-link" onClick={() => setMode('privacy')}>{t('footer.privacy')}</button>
+          <span className="footer-sep">·</span>
+          <button className="footer-link" onClick={() => setMode('contact')}>{t('footer.contact')}</button>
+        </div>
+        <div>{t('footer.text', { year: new Date().getFullYear() })}</div>
       </footer>
     </div>
   )
