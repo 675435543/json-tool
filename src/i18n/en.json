@@ -107,5 +107,7 @@
   "privacy.contact_desc": "If you have any questions about this Privacy Policy, please contact us at:",
   "contact.title": "Contact Us",
   "contact.email": "Email",
-  "contact.response": "We will respond to your inquiry as soon as possible."
+  "contact.response": "We will respond to your inquiry as soon as possible.",
+  "theme.light": "Switch to light mode",
+  "theme.dark": "Switch to dark mode"
 }

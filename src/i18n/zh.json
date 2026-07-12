@@ -107,5 +107,7 @@
   "privacy.contact_desc": "如果您对此隐私政策有任何疑问，请通过以下方式联系我们：",
   "contact.title": "联系我们",
   "contact.email": "邮箱",
-  "contact.response": "我们将尽快回复您的咨询。"
+  "contact.response": "我们将尽快回复您的咨询。",
+  "theme.light": "切换到浅色主题",
+  "theme.dark": "切换到深色主题"
 }

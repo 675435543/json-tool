@@ -220,6 +220,18 @@ function App() {
   const [diffResult, setDiffResult] = useState<DiffEntry[] | null>(null)
   const [jpExpr, setJpExpr] = useState('')
   const [jpResult, setJpResult] = useState<string>('')
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark')
+  const isLight = theme === 'light'
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('light-theme', isLight)
+    localStorage.setItem('theme', theme)
+  }, [theme, isLight])
+
+  const toggleTheme = useCallback(() => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark')
+  }, [])
+
   const [langOpen, setLangOpen] = useState(false)
   const [jwtInput, setJwtInput] = useState('')
   const [jwtResult, setJwtResult] = useState('')
@@ -695,6 +707,9 @@ function App() {
         <div className="header-top">
           <h1>🔧 {t('app.title')}</h1>
           <div className="lang-switcher" ref={langRef}>
+            <button className="theme-btn" onClick={toggleTheme} title={isLight ? t('theme.dark') : t('theme.light')}>
+              {isLight ? '🌙' : '☀️'}
+            </button>
             <button className="lang-btn" onClick={() => setLangOpen(!langOpen)}>
               {currentLang.flag} {currentLang.label} ▾
             </button>
@@ -971,15 +986,12 @@ function App() {
           <div className="diff-toolbar">
             <button className="btn btn-outline" onClick={handleGenBack}>{t('gen.back')}</button>
           </div>
-          <div className="gen-area" style={{ padding: '16px', background: '#1e293b', borderRadius: '12px' }}>
-            <label style={{ color: '#94a3b8', fontSize: '14px', marginRight: '12px' }}>{t('gen.count')}</label>
+          <div className="gen-area">
+            <label>{t('gen.count')}</label>
             <input
+              className="gen-input"
               type="number" min="1" max="100" value={genCount}
               onChange={e => setGenCount(Number(e.target.value))}
-              style={{
-                background: '#0f172a', border: '1px solid #334155', borderRadius: '8px',
-                color: '#e2e8f0', padding: '8px 12px', fontSize: '14px', width: '80px', marginRight: '12px'
-              }}
             />
             <button className="btn btn-purple" onClick={handleGenerate}>⚡ {t('gen.generate')}</button>
           </div>
