@@ -237,6 +237,7 @@ function App() {
   const [langOpen, setLangOpen] = useState(false)
   const [codegenOpen, setCodegenOpen] = useState(false)
   const [sqlOpen, setSqlOpen] = useState(false)
+  const [encodeOpen, setEncodeOpen] = useState(false)
   const [jwtInput, setJwtInput] = useState('')
   const [jwtResult, setJwtResult] = useState('')
   const [yamlInput, setYamlInput] = useState('')
@@ -252,6 +253,7 @@ function App() {
   const langRef = useRef<HTMLDivElement>(null)
   const codegenRef = useRef<HTMLDivElement>(null)
   const sqlRef = useRef<HTMLDivElement>(null)
+  const encodeRef = useRef<HTMLDivElement>(null)
 
   // ========== Toast ==========
 
@@ -474,46 +476,56 @@ function App() {
     updateStats(generated)
   }, [input, showToast, updateStats, t])
 
-  // ========== Base64 ==========
+  // ========== Encode/Decode (Base64, URI, URIComponent) ==========
 
-  const handleToBase64 = useCallback(() => {
+  const handleEncodeSelect = useCallback((type: string) => {
+    setEncodeOpen(false)
     const trimmed = input.trim()
     if (!trimmed) { showToast('error', t('toast.input.empty')); return }
-    // Validate JSON first
-    try { JSON.parse(trimmed) } catch { showToast('error', t('toast.invalid')); return }
-    try {
-      const encoded = btoa(trimmed)
-      setOutput(encoded)
-      setErrorInfo('')
-      showToast('success', t('toast.base64_encoded'))
-      updateStats(encoded)
-    } catch {
-      showToast('error', t('toast.base64_fail'))
-    }
-  }, [input, showToast, updateStats, t])
 
-  const handleFromBase64 = useCallback(() => {
-    const trimmed = input.trim()
-    if (!trimmed) { showToast('error', t('toast.input.empty')); return }
     try {
-      const decoded = atob(trimmed)
-      // Validate the result is valid JSON and format it
-      try {
-        const parsed = JSON.parse(decoded)
-        const formatted = JSON.stringify(parsed, null, 2)
-        setOutput(formatted)
-        setErrorInfo('')
-        showToast('success', t('toast.base64_decoded'))
-        updateStats(formatted)
-      } catch {
-        // Valid Base64 but not JSON — still show the decoded string
-        setOutput(decoded)
-        setErrorInfo('')
-        showToast('success', t('toast.base64_decoded'))
-        updateStats(decoded)
+      let result: string
+      switch (type) {
+        case 'base64-encode':
+          // Validate JSON first (backward compatible)
+          try { JSON.parse(trimmed) } catch { showToast('error', t('toast.invalid')); return }
+          result = btoa(trimmed)
+          showToast('success', t('toast.base64_encoded'))
+          break
+        case 'base64-decode':
+          result = atob(trimmed)
+          // Try to format if JSON
+          try {
+            const parsed = JSON.parse(result)
+            result = JSON.stringify(parsed, null, 2)
+          } catch { /* not JSON, keep raw */ }
+          showToast('success', t('toast.base64_decoded'))
+          break
+        case 'uri-encode':
+          result = encodeURI(trimmed)
+          showToast('success', t('toast.uri_encoded'))
+          break
+        case 'uri-decode':
+          result = decodeURI(trimmed)
+          showToast('success', t('toast.uri_decoded'))
+          break
+        case 'uricomp-encode':
+          result = encodeURIComponent(trimmed)
+          showToast('success', t('toast.uri_encoded'))
+          break
+        case 'uricomp-decode':
+          result = decodeURIComponent(trimmed)
+          showToast('success', t('toast.uri_decoded'))
+          break
+        default:
+          showToast('error', t('toast.uri_fail'))
+          return
       }
+      setOutput(result)
+      setErrorInfo('')
+      updateStats(result)
     } catch {
-      showToast('error', t('toast.base64_invalid'))
+      showToast('error', type.startsWith('base64') ? t('toast.base64_invalid') : t('toast.uri_invalid'))
     }
   }, [input, showToast, updateStats, t])
 
@@ -761,6 +773,7 @@ function App() {
       if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false)
       if (codegenRef.current && !codegenRef.current.contains(e.target as Node)) setCodegenOpen(false)
       if (sqlRef.current && !sqlRef.current.contains(e.target as Node)) setSqlOpen(false)
+      if (encodeRef.current && !encodeRef.current.contains(e.target as Node)) setEncodeOpen(false)
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
@@ -820,8 +833,23 @@ function App() {
           <div className="toolbar-group">
             <button className="btn btn-purple" onClick={handleToCSV}>{t('btn.to_csv')}</button>
             <button className="btn btn-outline" onClick={handleEscape}>{t('btn.escape')}</button>
-            <button className="btn btn-purple" onClick={handleToBase64}>{t('btn.to_base64')}</button>
-            <button className="btn btn-purple" onClick={handleFromBase64}>{t('btn.from_base64')}</button>
+            <div className="codegen-wrap" ref={encodeRef}>
+              <button className="btn btn-purple" onClick={() => setEncodeOpen(!encodeOpen)}>
+                {t('btn.encode_decode')} ▾
+              </button>
+              {encodeOpen && (
+                <div className="codegen-dropdown">
+                  <button className="codegen-option" onClick={() => handleEncodeSelect('base64-encode')}>{t('encode.base64_encode')}</button>
+                  <button className="codegen-option" onClick={() => handleEncodeSelect('base64-decode')}>{t('encode.base64_decode')}</button>
+                  <div style={{ height: 1, background: 'var(--border)', margin: '4px 0' }} />
+                  <button className="codegen-option" onClick={() => handleEncodeSelect('uri-encode')}>{t('encode.uri_encode')}</button>
+                  <button className="codegen-option" onClick={() => handleEncodeSelect('uri-decode')}>{t('encode.uri_decode')}</button>
+                  <div style={{ height: 1, background: 'var(--border)', margin: '4px 0' }} />
+                  <button className="codegen-option" onClick={() => handleEncodeSelect('uricomp-encode')}>{t('encode.uricomp_encode')}</button>
+                  <button className="codegen-option" onClick={() => handleEncodeSelect('uricomp-decode')}>{t('encode.uricomp_decode')}</button>
+                </div>
+              )}
+            </div>
             <button className="btn btn-purple" onClick={handleToJavaPOJO}>{t('btn.java_pojo')}</button>
             <button className="btn btn-purple" onClick={handleToTypeScript}>{t('btn.to_typescript')}</button>
             <div className="codegen-wrap" ref={codegenRef}>
