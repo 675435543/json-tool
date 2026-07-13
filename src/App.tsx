@@ -333,6 +333,7 @@ function App() {
       const formatted = JSON.stringify(parsed, null, indent)
       setOutput(formatted)
       setErrorInfo('')
+      setGeneratedLang('')
       const label = indent > 0 ? t('toast.formatted', { indent: `${indent} spaces` }) : t('toast.compacted')
       showToast('success', label)
       updateStats(formatted)
@@ -387,6 +388,7 @@ function App() {
     if (!csv) { showToast('error', t('toast.csv_fail')); return }
     setOutput(csv)
     setErrorInfo('')
+    setGeneratedLang('')
     showToast('success', t('toast.converted_csv'))
     updateStats(csv)
   }, [input, tryParseJSON, jsonToCSV, showToast, updateStats, t])
@@ -400,6 +402,7 @@ function App() {
       const escaped = str.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t')
       setOutput(escaped)
       setErrorInfo('')
+      setGeneratedLang('')
       showToast('success', t('toast.escaped'))
       updateStats(escaped)
     } catch (e: any) {
@@ -434,6 +437,7 @@ function App() {
     setInput(output)
     setOutput('')
     setErrorInfo('')
+    setGeneratedLang('')
     updateStats(output)
   }, [output, updateStats, showToast, t])
 
@@ -451,6 +455,7 @@ function App() {
     const pojo = generateJavaClass(parsed, 'JsonRoot')
     setOutput(pojo)
     setErrorInfo('')
+    setGeneratedLang('')
     showToast('success', t('toast.java_pojo'))
     updateStats(pojo)
   }, [input, tryParseJSON, showToast, updateStats, t])
@@ -523,6 +528,7 @@ function App() {
       }
       setOutput(result)
       setErrorInfo('')
+      setGeneratedLang('')
       updateStats(result)
     } catch {
       showToast('error', type.startsWith('base64') ? t('toast.base64_invalid') : t('toast.uri_invalid'))
@@ -543,6 +549,7 @@ function App() {
     const ts = generateTSInterfaces(parsed, 'Root')
     setOutput(ts)
     setErrorInfo('')
+    setGeneratedLang('')
     showToast('success', t('toast.ts_interface'))
     updateStats(ts)
   }, [input, tryParseJSON, showToast, updateStats, t])
