@@ -14,6 +14,10 @@ const tools = [
   { path: '/json-to-yaml', icon: '📝', key: 'home.to_yaml', desc: 'home.desc_yaml' },
   { path: '/jwt-decode', icon: '🔓', key: 'home.jwt', desc: 'home.desc_jwt' },
   { path: '/json-generator', icon: '⚡', key: 'home.generator', desc: 'home.desc_generator' },
+  { path: '/csv-to-json', icon: '🔄', key: 'home.csv_to_json', desc: 'home.desc_csv_to_json' },
+  { path: '/json-schema-validator', icon: '📋', key: 'home.schema_validator', desc: 'home.desc_schema_validator' },
+  { path: '/json-viewer', icon: '🌳', key: 'home.json_viewer', desc: 'home.desc_json_viewer' },
+  { path: '/json-converter', icon: '🔀', key: 'home.converter_hub', desc: 'home.desc_converter_hub' },
 ]
 
 export default function Home() {

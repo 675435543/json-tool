@@ -15,6 +15,9 @@ import JsonCompressor from './pages/tools/JsonCompressor'
 import JwtDecode from './pages/tools/JwtDecode'
 import JsonToYaml from './pages/tools/JsonToYaml'
 import JsonGenerator from './pages/tools/JsonGenerator'
+import CsvToJson from './pages/tools/CsvToJson'
+import JsonSchemaValidator from './pages/tools/JsonSchemaValidator'
+import JsonViewer from './pages/tools/JsonViewer'
 import BlogIndex from './pages/blog/BlogIndex'
 import BlogJsonGuide from './pages/blog/JsonGuide'
 import BlogApiGuide from './pages/blog/ApiGuide'
@@ -22,6 +25,7 @@ import BlogSchemaGuide from './pages/blog/SchemaGuide'
 import BlogFormatterVsBeautifier from './pages/blog/FormatterVsBeautifier'
 import BlogTopTools from './pages/blog/TopTools'
 import BlogRestApi from './pages/blog/RestApi'
+import JsonConverterHub from './pages/JsonConverterHub'
 import Privacy from './pages/Privacy'
 import Contact from './pages/Contact'
 import './App.css'
@@ -65,6 +69,10 @@ export default function App() {
         <Route path="/jwt-decode" element={<JwtDecode />} />
         <Route path="/json-to-yaml" element={<JsonToYaml />} />
         <Route path="/json-generator" element={<JsonGenerator />} />
+        <Route path="/csv-to-json" element={<CsvToJson />} />
+        <Route path="/json-schema-validator" element={<JsonSchemaValidator />} />
+        <Route path="/json-viewer" element={<JsonViewer />} />
+        <Route path="/json-converter" element={<JsonConverterHub />} />
         <Route path="/blog" element={<BlogIndex />} />
         <Route path="/blog/json-guide" element={<BlogJsonGuide />} />
         <Route path="/blog/json-api-guide" element={<BlogApiGuide />} />
