@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
 Sitemap: https://jsonprocess.app/sitemap.xml
