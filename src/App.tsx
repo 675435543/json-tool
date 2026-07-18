@@ -19,6 +19,9 @@ import BlogIndex from './pages/blog/BlogIndex'
 import BlogJsonGuide from './pages/blog/JsonGuide'
 import BlogApiGuide from './pages/blog/ApiGuide'
 import BlogSchemaGuide from './pages/blog/SchemaGuide'
+import BlogFormatterVsBeautifier from './pages/blog/FormatterVsBeautifier'
+import BlogTopTools from './pages/blog/TopTools'
+import BlogRestApi from './pages/blog/RestApi'
 import Privacy from './pages/Privacy'
 import Contact from './pages/Contact'
 import './App.css'
@@ -66,6 +69,9 @@ export default function App() {
         <Route path="/blog/json-guide" element={<BlogJsonGuide />} />
         <Route path="/blog/json-api-guide" element={<BlogApiGuide />} />
         <Route path="/blog/json-schema-guide" element={<BlogSchemaGuide />} />
+        <Route path="/blog/json-formatter-vs-beautifier-vs-minifier" element={<BlogFormatterVsBeautifier />} />
+        <Route path="/blog/top-json-tools" element={<BlogTopTools />} />
+        <Route path="/blog/json-rest-api-best-practices" element={<BlogRestApi />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
