@@ -281,6 +281,71 @@ export default function JsonFormatter() {
         <span>📝 {t('stats.lines')}: {lineCount}</span>
         <span>⚡ {t('stats.pure_frontend')}</span>
       </div>
+
+      <section style={{ marginTop: '40px', background: 'var(--bg-secondary)', borderRadius: '12px', padding: '32px', border: '1px solid var(--border)', lineHeight: '1.8' }}>
+        <h2 style={{ fontSize: '24px', marginBottom: '24px', color: 'var(--text-heading)' }}>JSON Formatter — Complete Guide</h2>
+
+        <h3 style={{ fontSize: '18px', marginBottom: '8px', color: 'var(--text-heading)' }}>① What is a JSON Formatter?</h3>
+        <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+          A JSON Formatter is a tool that takes raw, minified, or poorly structured JSON and transforms it into clean, properly indented, human-readable format. It adds consistent line breaks, spacing, and indentation so you can easily read, debug, and understand JSON data. Think of it as "prettifying" ugly code — turning <code style={{ background: 'var(--bg-tertiary)', padding: '2px 6px', borderRadius: '4px' }}>{`{"a":1,"b":2}`}</code> into a beautifully structured document.
+        </p>
+
+        <h3 style={{ fontSize: '18px', marginBottom: '8px', color: 'var(--text-heading)' }}>② Why Format JSON?</h3>
+        <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+          <p>✅ <strong>Read API responses</strong> — Most APIs return minified JSON. Formatting makes responses instantly readable.</p>
+          <p>✅ <strong>Debug errors</strong> — Spot missing commas, invalid quotes, and structure issues at a glance.</p>
+          <p>✅ <strong>Code review</strong> — Formatted JSON is much easier to review in pull requests and documentation.</p>
+          <p>✅ <strong>Share examples</strong> — Clean, formatted JSON is professional and easy for teammates to understand.</p>
+          <p>✅ <strong>Learn JSON</strong> — Seeing well-formatted JSON helps beginners understand the structure.</p>
+        </div>
+
+        <h3 style={{ fontSize: '18px', marginBottom: '8px', color: 'var(--text-heading)' }}>③ How to Format JSON Online</h3>
+        <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+          <p>1. <strong>Paste</strong> your JSON into the input panel above</p>
+          <p>2. Click <strong>Format (2)</strong> for 2-space indentation or <strong>Format (4)</strong> for 4-space</p>
+          <p>3. Your formatted JSON appears instantly in the output panel</p>
+          <p>4. Click <strong>Copy</strong> to copy the formatted result, or <strong>Swap</strong> to continue editing</p>
+          <p>💡 You can also drag & drop a .json file, or upload one with the file picker above.</p>
+        </div>
+
+        <h3 style={{ fontSize: '18px', marginBottom: '8px', color: 'var(--text-heading)' }}>④ JSON Beautify vs JSON Minify — What's the Difference?</h3>
+        <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+          <p><strong>Format/Beautify</strong> adds whitespace, indentation, and line breaks. It makes JSON larger but readable. Use this during <strong>development</strong>.</p>
+          <p><strong>Minify/Compress</strong> removes ALL unnecessary whitespace, creating the smallest possible file. Use this for <strong>production</strong> to reduce bandwidth and improve load times.</p>
+          <p style={{ marginTop: '8px' }}>Need to compress? Try our dedicated <Link to="/json-compressor" style={{ color: 'var(--text-link)' }}>JSON Compressor →</Link></p>
+          <p>Need to validate? Try our <Link to="/json-validator" style={{ color: 'var(--text-link)' }}>JSON Validator →</Link></p>
+        </div>
+
+        <h3 style={{ fontSize: '18px', marginBottom: '8px', color: 'var(--text-heading)' }}>⑤ Supported Features</h3>
+        <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+          <p>✨ <strong>Multiple indent styles</strong> — Choose 2-space or 4-space indentation</p>
+          <p>✨ <strong>Syntax error detection</strong> — Invalid JSON is caught instantly with line & column info</p>
+          <p>✨ <strong>Tree view</strong> — Toggle between text and interactive tree view for nested data</p>
+          <p>✨ <strong>Code generation</strong> — Convert JSON to Java POJO, TypeScript, Python, Go, C#, Rust, Kotlin, PHP, Ruby, Swift, Scala, Groovy, C, C++, and SQL (MySQL, Oracle, SQLite)</p>
+          <p>✨ <strong>Encode/Decode</strong> — Base64 encode/decode, URI encode/decode, URIComponent encode/decode</p>
+          <p>✨ <strong>File upload & drag-drop</strong> — Load .json files directly</p>
+          <p>✨ <strong>Swap input/output</strong> — Edit formatted JSON and reformat with one click</p>
+          <p>✨ <strong>Dark & Light theme</strong> — Comfortable viewing in any environment</p>
+        </div>
+
+        <h3 style={{ fontSize: '18px', marginBottom: '8px', color: 'var(--text-heading)' }}>⑥ FAQ</h3>
+        <div style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
+          <p style={{ marginBottom: '12px' }}><strong>Q: Is my JSON data uploaded to a server?</strong><br/>
+          A: No. JSON Tool Pro is 100% client-side. All processing happens in your browser. Your JSON never leaves your device.</p>
+
+          <p style={{ marginBottom: '12px' }}><strong>Q: Is this JSON formatter free?</strong><br/>
+          A: Yes, completely free. No sign-up required, no usage limits.</p>
+
+          <p style={{ marginBottom: '12px' }}><strong>Q: Can I format very large JSON files?</strong><br/>
+          A: Yes, but browser performance varies. Files up to a few megabytes work smoothly. For very large files, consider using a command-line tool like <code style={{ background: 'var(--bg-tertiary)', padding: '2px 6px', borderRadius: '4px' }}>jq</code>.</p>
+
+          <p style={{ marginBottom: '12px' }}><strong>Q: Does the formatter change my JSON data?</strong><br/>
+          A: No. Formatting only changes whitespace and indentation. Your actual data (keys, values, types, order) remains exactly the same.</p>
+
+          <p style={{ marginBottom: '12px' }}><strong>Q: What's the difference between 2-space and 4-space indent?</strong><br/>
+          A: It's purely visual preference. 2-space is more compact (common in JavaScript/Node.js projects). 4-space is slightly more readable (common in Python projects). Both produce valid JSON.</p>
+        </div>
+      </section>
     </>
   )
 }

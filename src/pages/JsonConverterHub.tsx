@@ -56,6 +56,36 @@ export default function JsonConverterHub() {
           ))}
         </div>
       </section>
+
+      <section style={{ marginTop: '40px', background: 'var(--bg-secondary)', borderRadius: '12px', padding: '32px', border: '1px solid var(--border)', lineHeight: '1.8' }}>
+        <h2 style={{ fontSize: '24px', marginBottom: '24px', color: 'var(--text-heading)' }}>JSON Converter — Complete Guide</h2>
+
+        <h3 style={{ fontSize: '18px', marginBottom: '8px', color: 'var(--text-heading)' }}>① Why Convert JSON?</h3>
+        <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+          JSON is the universal data format for APIs, but it's not always the right format for every task. Converting JSON to other formats unlocks powerful workflows:
+        </p>
+        <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+          <p>🔄 <strong>JSON → CSV</strong>: Export API data to Excel, Google Sheets, or any spreadsheet tool for analysis and reporting</p>
+          <p>🔄 <strong>CSV → JSON</strong>: Import spreadsheet data into your application or API</p>
+          <p>🔄 <strong>JSON → TypeScript</strong>: Generate type-safe interfaces from API responses — no more manual typing!</p>
+          <p>🔄 <strong>JSON → Java POJO</strong>: Create Jackson/Gson-ready Java classes for Spring Boot and Android</p>
+          <p>🔄 <strong>JSON → YAML</strong>: Convert config JSON to YAML for Docker Compose, Kubernetes, Ansible, and CI/CD</p>
+        </div>
+
+        <h3 style={{ fontSize: '18px', marginBottom: '8px', color: 'var(--text-heading)' }}>④ Real-World Use Cases</h3>
+        <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+          <p><strong>Data export:</strong> You have a JSON endpoint returning user data. Convert to CSV → download → send to the marketing team as a spreadsheet.</p>
+          <p style={{ marginTop: '8px' }}><strong>API integration:</strong> You're building a React frontend. Copy the API response → convert to TypeScript interfaces → paste into your project. Type safety in seconds.</p>
+          <p style={{ marginTop: '8px' }}><strong>Backend development:</strong> You're building a Spring Boot microservice. Take the API contract JSON → generate Java POJOs → ready for your controller.</p>
+          <p style={{ marginTop: '8px' }}><strong>DevOps:</strong> You have a JSON config file. Convert to YAML → use in your Kubernetes deployment or Docker Compose setup.</p>
+        </div>
+
+        <h3 style={{ fontSize: '18px', marginBottom: '8px', color: 'var(--text-heading)' }}>⑥ Developer Productivity Boost</h3>
+        <div style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+          <p>Using these converters saves <strong>15-30 minutes per integration task</strong> compared to manually typing type definitions or data models. Over a sprint, that adds up to hours of saved development time.</p>
+          <p style={{ marginTop: '8px' }}>All converters are <strong>100% client-side</strong> — your data stays in your browser. No server upload, no privacy concerns.</p>
+        </div>
+      </section>
     </>
   )
 }
