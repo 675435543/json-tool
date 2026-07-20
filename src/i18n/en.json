@@ -300,5 +300,10 @@
   "home.cat_format": "Formatting & Validation",
   "home.cat_convert": "Conversion",
   "home.cat_codegen": "Code & Schema Generation",
-  "home.cat_devtools": "Developer Tools"
+  "home.cat_devtools": "Developer Tools",
+  "api.title": "API Response Tester",
+  "api.subtitle": "Send HTTP requests and inspect JSON responses. Test REST APIs, view formatted JSON, headers, status codes — all from your browser.",
+  "api.hint": "Enter an API URL above and click Send. Try the sample URLs to get started.",
+  "home.api_tester": "API Tester",
+  "home.desc_api_tester": "Test REST APIs: send requests, inspect JSON responses & headers"
 }

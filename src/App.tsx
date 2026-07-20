@@ -24,6 +24,7 @@ import JsonSchemaGenerator from './pages/tools/JsonSchemaGenerator'
 import JsonStats from './pages/tools/JsonStats'
 import JsonFlatten from './pages/tools/JsonFlatten'
 import JsonPlayground from './pages/tools/JsonPlayground'
+import ApiTester from './pages/tools/ApiTester'
 import BlogIndex from './pages/blog/BlogIndex'
 import BlogJsonGuide from './pages/blog/JsonGuide'
 import BlogApiGuide from './pages/blog/ApiGuide'
@@ -32,6 +33,7 @@ import BlogFormatterVsBeautifier from './pages/blog/FormatterVsBeautifier'
 import BlogJsonFormatterGuide from './pages/blog/JsonFormatterGuide'
 import BlogTopTools from './pages/blog/TopTools'
 import BlogRestApi from './pages/blog/RestApi'
+import BlogJsonErrors from './pages/blog/JsonErrors'
 import JsonConverterHub from './pages/JsonConverterHub'
 import Privacy from './pages/Privacy'
 import Contact from './pages/Contact'
@@ -85,6 +87,7 @@ export default function App() {
         <Route path="/json-stats" element={<JsonStats />} />
         <Route path="/json-flatten" element={<JsonFlatten />} />
         <Route path="/json-playground" element={<JsonPlayground />} />
+        <Route path="/api-tester" element={<ApiTester />} />
         <Route path="/json-converter" element={<JsonConverterHub />} />
         <Route path="/blog" element={<BlogIndex />} />
         <Route path="/blog/json-guide" element={<BlogJsonGuide />} />
@@ -94,6 +97,7 @@ export default function App() {
         <Route path="/blog/json-formatter-guide" element={<BlogJsonFormatterGuide />} />
         <Route path="/blog/top-json-tools" element={<BlogTopTools />} />
         <Route path="/blog/json-rest-api-best-practices" element={<BlogRestApi />} />
+        <Route path="/blog/10-common-json-errors" element={<BlogJsonErrors />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>

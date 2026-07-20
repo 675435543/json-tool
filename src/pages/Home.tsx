@@ -59,6 +59,7 @@ const categories: ToolCategory[] = [
       { path: '/json-diff', icon: '🔄', key: 'home.diff', desc: 'home.desc_diff' },
       { path: '/jwt-decode', icon: '🔓', key: 'home.jwt', desc: 'home.desc_jwt' },
       { path: '/json-stats', icon: '📊', key: 'home.stats', desc: 'home.desc_stats' },
+      { path: '/api-tester', icon: '🚀', key: 'home.api_tester', desc: 'home.desc_api_tester' },
     ],
   },
 ]

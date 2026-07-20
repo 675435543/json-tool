@@ -1182,3 +1182,15 @@ footer {
   color: var(--text-secondary);
   line-height: 1.6;
 }
+
+.playground-output {
+  padding: 16px;
+  margin: 0;
+  font-size: 13px;
+  font-family: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: auto;
+  color: var(--text-primary);
+}

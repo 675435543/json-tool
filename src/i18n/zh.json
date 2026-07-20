@@ -300,5 +300,10 @@
   "home.cat_format": "格式化与校验",
   "home.cat_convert": "格式转换",
   "home.cat_codegen": "代码与 Schema 生成",
-  "home.cat_devtools": "开发者工具"
+  "home.cat_devtools": "开发者工具",
+  "api.title": "API 响应测试工具",
+  "api.subtitle": "发送 HTTP 请求并检查 JSON 响应。测试 REST API，查看格式化 JSON、响应头、状态码 — 全部在浏览器中完成。",
+  "api.hint": "在上方输入 API URL 后点击发送。试试示例 URL 来了解如何使用。",
+  "home.api_tester": "API 测试",
+  "home.desc_api_tester": "测试 REST API：发送请求、查看 JSON 响应和响应头"
 }
