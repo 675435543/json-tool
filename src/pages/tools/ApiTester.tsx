@@ -61,8 +61,8 @@ export default function ApiTester() {
       }
 
       const response = await fetch(url.trim(), fetchOptions)
-      const headers: Record<string, string> = {}
-      response.headers.forEach((v, k) => { headers[k] = v })
+      const respHeaders: Record<string, string> = {}
+      response.headers.forEach((v, k) => { respHeaders[k] = v })
 
       const text = await response.text()
       const elapsed = Math.round(performance.now() - start)
