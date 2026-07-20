@@ -283,5 +283,18 @@
   "flatten.placeholder": "在此粘贴嵌套 JSON 进行扁平化...",
   "flatten.output_placeholder": "结果将显示在这里...",
   "home.flatten": "JSON 扁平化",
-  "home.desc_flatten": "将嵌套 JSON 扁平化为点号格式并支持反扁平化"
+  "home.desc_flatten": "将嵌套 JSON 扁平化为点号格式并支持反扁平化",
+  "playground.title": "JSON Playground",
+  "playground.subtitle": "一次粘贴 JSON，多角度探索。格式化、树形视图、代码生成、Schema 生成和统计分析 — 全部在一个页面完成。",
+  "playground.input": "JSON 输入",
+  "playground.input_placeholder": "在此粘贴你的 JSON...",
+  "playground.hint_paste": "上方粘贴 JSON 后即可开始",
+  "playground.hint_codegen": "选择语言后点击 Generate",
+  "playground.tab_format": "格式化",
+  "playground.tab_tree": "树视图",
+  "playground.tab_codegen": "代码生成",
+  "playground.tab_schema": "Schema",
+  "playground.tab_stats": "统计",
+  "home.playground": "JSON Playground",
+  "home.desc_playground": "一站式 JSON 工作台：格式化、树视图、代码生成、Schema 和统计"
 }

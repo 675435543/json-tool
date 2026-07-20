@@ -283,5 +283,18 @@
   "flatten.placeholder": "Paste nested JSON here to flatten...",
   "flatten.output_placeholder": "Result will appear here...",
   "home.flatten": "JSON Flatten",
-  "home.desc_flatten": "Flatten nested JSON to dot notation & unflatten back"
+  "home.desc_flatten": "Flatten nested JSON to dot notation & unflatten back",
+  "playground.title": "JSON Playground",
+  "playground.subtitle": "Paste JSON once, explore it from every angle. Format, tree view, code generation, schema generation, and statistics — all in one place.",
+  "playground.input": "JSON Input",
+  "playground.input_placeholder": "Paste your JSON here...",
+  "playground.hint_paste": "Paste JSON above to get started",
+  "playground.hint_codegen": "Select a language and click Generate",
+  "playground.tab_format": "Format",
+  "playground.tab_tree": "Tree View",
+  "playground.tab_codegen": "Code Gen",
+  "playground.tab_schema": "Schema",
+  "playground.tab_stats": "Stats",
+  "home.playground": "JSON Playground",
+  "home.desc_playground": "All-in-one JSON workspace: format, tree, code gen, schema & stats"
 }

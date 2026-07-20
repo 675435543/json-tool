@@ -23,6 +23,7 @@ import JsonCodeGen from './pages/tools/JsonCodeGen'
 import JsonSchemaGenerator from './pages/tools/JsonSchemaGenerator'
 import JsonStats from './pages/tools/JsonStats'
 import JsonFlatten from './pages/tools/JsonFlatten'
+import JsonPlayground from './pages/tools/JsonPlayground'
 import BlogIndex from './pages/blog/BlogIndex'
 import BlogJsonGuide from './pages/blog/JsonGuide'
 import BlogApiGuide from './pages/blog/ApiGuide'
@@ -83,6 +84,7 @@ export default function App() {
         <Route path="/json-schema-generator" element={<JsonSchemaGenerator />} />
         <Route path="/json-stats" element={<JsonStats />} />
         <Route path="/json-flatten" element={<JsonFlatten />} />
+        <Route path="/json-playground" element={<JsonPlayground />} />
         <Route path="/json-converter" element={<JsonConverterHub />} />
         <Route path="/blog" element={<BlogIndex />} />
         <Route path="/blog/json-guide" element={<BlogJsonGuide />} />
