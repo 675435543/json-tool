@@ -296,5 +296,9 @@
   "playground.tab_schema": "Schema",
   "playground.tab_stats": "Stats",
   "home.playground": "JSON Playground",
-  "home.desc_playground": "All-in-one JSON workspace: format, tree, code gen, schema & stats"
+  "home.desc_playground": "All-in-one JSON workspace: format, tree, code gen, schema & stats",
+  "home.cat_format": "Formatting & Validation",
+  "home.cat_convert": "Conversion",
+  "home.cat_codegen": "Code & Schema Generation",
+  "home.cat_devtools": "Developer Tools"
 }

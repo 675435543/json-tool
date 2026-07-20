@@ -296,5 +296,9 @@
   "playground.tab_schema": "Schema",
   "playground.tab_stats": "统计",
   "home.playground": "JSON Playground",
-  "home.desc_playground": "一站式 JSON 工作台：格式化、树视图、代码生成、Schema 和统计"
+  "home.desc_playground": "一站式 JSON 工作台：格式化、树视图、代码生成、Schema 和统计",
+  "home.cat_format": "格式化与校验",
+  "home.cat_convert": "格式转换",
+  "home.cat_codegen": "代码与 Schema 生成",
+  "home.cat_devtools": "开发者工具"
 }
