@@ -24,6 +24,10 @@ export default function ApiTester() {
   const [loading, setLoading] = useState(false)
   const [viewMode, setViewMode] = useState<'formatted' | 'raw' | 'tree'>('formatted')
   const [headersOpen, setHeadersOpen] = useState(false)
+  const [history, setHistory] = useState<{ url: string; method: string; headers: { key: string; value: string }[]; body: string; time: string }[]>(
+    () => { try { return JSON.parse(localStorage.getItem('api_history') || '[]') } catch { return [] } }
+  )
+  const [historyOpen, setHistoryOpen] = useState(false)
   const [toast, setToast] = useState<{ type: string; msg: string } | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout>>(null)
 
@@ -81,6 +85,15 @@ export default function ApiTester() {
         data,
         time: elapsed,
         size: new Blob([text]).size,
+      })
+
+      // Save to history (max 15)
+      const entry = { url: url.trim(), method, headers: headers.filter(h => h.key.trim()), body: body.trim(), time: new Date().toLocaleTimeString() }
+      setHistory(prev => {
+        const filtered = prev.filter(h => h.url !== entry.url) // dedupe by URL
+        const updated = [entry, ...filtered].slice(0, 15)
+        try { localStorage.setItem('api_history', JSON.stringify(updated)) } catch {}
+        return updated
       })
     } catch (err: any) {
       // CORS might be the issue — show helpful message
@@ -170,6 +183,34 @@ export default function ApiTester() {
           </button>
         ))}
       </div>
+
+      {/* Request History */}
+      {history.length > 0 && (
+        <details open={historyOpen} style={{ marginBottom: '16px' }}>
+          <summary
+            onClick={e => { e.preventDefault(); setHistoryOpen(o => !o) }}
+            style={{ cursor: 'pointer', fontSize: '13px', color: 'var(--text-muted)', padding: '8px 12px', background: 'var(--bg-secondary)', borderRadius: '6px', border: '1px solid var(--border)', userSelect: 'none' }}
+          >
+            {historyOpen ? '▼' : '▶'} History ({history.length})
+          </summary>
+          <div style={{ marginTop: '8px', display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '250px', overflow: 'auto' }}>
+            {history.map((h, i) => (
+              <div key={i}
+                onClick={() => { setUrl(h.url); setMethod(h.method as any); setHeaders(h.headers.length > 0 ? h.headers : [{ key: '', value: '' }]); setBody(h.body); setHistoryOpen(false) }}
+                style={{ padding: '8px 12px', borderRadius: '6px', cursor: 'pointer', background: 'var(--bg-primary)', border: '1px solid var(--border)', fontSize: '13px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent)'}
+                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+              >
+                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '70%' }}>
+                  <strong style={{ color: 'var(--accent)', marginRight: '8px' }}>{h.method}</strong>
+                  {h.url}
+                </span>
+                <span style={{ color: 'var(--text-muted)', fontSize: '11px', flexShrink: 0 }}>{h.time}</span>
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
 
       {/* Request Body (for POST/PUT) */}
       {(method === 'POST' || method === 'PUT') && (
