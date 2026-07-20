@@ -77,7 +77,7 @@ export default function ApiTester() {
       setResult({
         status: response.status,
         statusText: response.statusText,
-        headers,
+        headers: respHeaders,
         data,
         time: elapsed,
         size: new Blob([text]).size,
