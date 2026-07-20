@@ -27,7 +27,6 @@ export default function ApiTester() {
   const [history, setHistory] = useState<{ url: string; method: string; headers: { key: string; value: string }[]; body: string; time: string }[]>(
     () => { try { return JSON.parse(localStorage.getItem('api_history') || '[]') } catch { return [] } }
   )
-  const [historyOpen, setHistoryOpen] = useState(false)
   const [toast, setToast] = useState<{ type: string; msg: string } | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout>>(null)
 
