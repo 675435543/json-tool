@@ -18,6 +18,8 @@ import JsonGenerator from './pages/tools/JsonGenerator'
 import CsvToJson from './pages/tools/CsvToJson'
 import JsonSchemaValidator from './pages/tools/JsonSchemaValidator'
 import JsonViewer from './pages/tools/JsonViewer'
+import JsonRepair from './pages/tools/JsonRepair'
+import JsonCodeGen from './pages/tools/JsonCodeGen'
 import BlogIndex from './pages/blog/BlogIndex'
 import BlogJsonGuide from './pages/blog/JsonGuide'
 import BlogApiGuide from './pages/blog/ApiGuide'
@@ -73,6 +75,8 @@ export default function App() {
         <Route path="/csv-to-json" element={<CsvToJson />} />
         <Route path="/json-schema-validator" element={<JsonSchemaValidator />} />
         <Route path="/json-viewer" element={<JsonViewer />} />
+        <Route path="/json-repair" element={<JsonRepair />} />
+        <Route path="/json-code-generator" element={<JsonCodeGen />} />
         <Route path="/json-converter" element={<JsonConverterHub />} />
         <Route path="/blog" element={<BlogIndex />} />
         <Route path="/blog/json-guide" element={<BlogJsonGuide />} />

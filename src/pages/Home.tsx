@@ -17,6 +17,8 @@ const tools = [
   { path: '/csv-to-json', icon: '🔄', key: 'home.csv_to_json', desc: 'home.desc_csv_to_json' },
   { path: '/json-schema-validator', icon: '📋', key: 'home.schema_validator', desc: 'home.desc_schema_validator' },
   { path: '/json-viewer', icon: '🌳', key: 'home.json_viewer', desc: 'home.desc_json_viewer' },
+  { path: '/json-repair', icon: '🔧', key: 'home.repair', desc: 'home.desc_repair' },
+  { path: '/json-code-generator', icon: '⚡', key: 'home.codegen', desc: 'home.desc_codegen' },
   { path: '/json-converter', icon: '🔀', key: 'home.converter_hub', desc: 'home.desc_converter_hub' },
 ]
 
