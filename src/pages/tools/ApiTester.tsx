@@ -18,10 +18,12 @@ export default function ApiTester() {
   const [url, setUrl] = useState('')
   const [method, setMethod] = useState<'GET' | 'POST' | 'PUT' | 'DELETE'>('GET')
   const [body, setBody] = useState('')
+  const [headers, setHeaders] = useState<{ key: string; value: string }[]>([{ key: '', value: '' }])
   const [result, setResult] = useState<ApiResult | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [viewMode, setViewMode] = useState<'formatted' | 'raw' | 'tree'>('formatted')
+  const [headersOpen, setHeadersOpen] = useState(false)
   const [toast, setToast] = useState<{ type: string; msg: string } | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout>>(null)
 
@@ -43,9 +45,18 @@ export default function ApiTester() {
     const start = performance.now()
 
     try {
-      const fetchOptions: RequestInit = { method }
+      // Build headers from custom header inputs
+      const customHeaders: Record<string, string> = {}
+      for (const h of headers) {
+        if (h.key.trim()) {
+          customHeaders[h.key.trim()] = h.value.trim()
+        }
+      }
+      if (method !== 'GET' && body.trim() && !customHeaders['Content-Type']) {
+        customHeaders['Content-Type'] = 'application/json'
+      }
+      const fetchOptions: RequestInit = { method, headers: customHeaders }
       if (method !== 'GET' && body.trim()) {
-        fetchOptions.headers = { 'Content-Type': 'application/json' }
         fetchOptions.body = body.trim()
       }
 
@@ -170,6 +181,41 @@ export default function ApiTester() {
             spellCheck={false} />
         </div>
       )}
+
+      {/* Custom Headers (collapsible) */}
+      <details open={headersOpen} style={{ marginTop: '16px', marginBottom: '16px' }}>
+        <summary
+          onClick={e => { e.preventDefault(); setHeadersOpen(o => !o) }}
+          style={{ cursor: 'pointer', fontSize: '14px', color: 'var(--text-secondary)', padding: '10px 14px', background: 'var(--bg-secondary)', borderRadius: '6px', border: '1px solid var(--border)', userSelect: 'none' }}
+        >
+          {headersOpen ? '▼' : '▶'} Custom Headers (Authorization, Content-Type, etc.)
+        </summary>
+        <div style={{ marginTop: '8px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          {headers.map((h, i) => (
+            <div key={i} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <input
+                type="text" value={h.key} onChange={e => {
+                  const h2 = [...headers]; h2[i].key = e.target.value; setHeaders(h2)
+                }}
+                placeholder="Header (e.g. Authorization)"
+                style={{ flex: '1', padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--bg-primary)', color: 'var(--text-primary)', fontSize: '13px' }} />
+              <input
+                type="text" value={h.value} onChange={e => {
+                  const h2 = [...headers]; h2[i].value = e.target.value; setHeaders(h2)
+                }}
+                placeholder="Value (e.g. Bearer xxx)"
+                style={{ flex: '2', padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--bg-primary)', color: 'var(--text-primary)', fontSize: '13px' }} />
+              <button className="btn" style={{ padding: '6px 10px', fontSize: '12px' }} onClick={() => {
+                if (headers.length <= 1) return
+                setHeaders(headers.filter((_, j) => j !== i))
+              }}>✕</button>
+            </div>
+          ))}
+          <button className="btn btn-outline" style={{ alignSelf: 'flex-start', fontSize: '12px', padding: '6px 14px' }} onClick={() => setHeaders([...headers, { key: '', value: '' }])}>
+            + Add Header
+          </button>
+        </div>
+      </details>
 
       {/* Error */}
       {error && (
