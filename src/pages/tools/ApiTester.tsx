@@ -184,19 +184,17 @@ export default function ApiTester() {
         ))}
       </div>
 
-      {/* Request History */}
+      {/* Request History — always visible when not empty */}
       {history.length > 0 && (
-        <details open={historyOpen} style={{ marginBottom: '16px' }}>
-          <summary
-            onClick={e => { e.preventDefault(); setHistoryOpen(o => !o) }}
-            style={{ cursor: 'pointer', fontSize: '13px', color: 'var(--text-muted)', padding: '8px 12px', background: 'var(--bg-secondary)', borderRadius: '6px', border: '1px solid var(--border)', userSelect: 'none' }}
-          >
-            {historyOpen ? '▼' : '▶'} History ({history.length})
-          </summary>
-          <div style={{ marginTop: '8px', display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '250px', overflow: 'auto' }}>
+        <div style={{ marginBottom: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: 500 }}>📋 Recent Requests</span>
+            <button className="btn btn-outline" style={{ fontSize: '11px', padding: '2px 8px' }} onClick={() => { setHistory([]); try { localStorage.removeItem('api_history') } catch {} }}>Clear</button>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '200px', overflow: 'auto' }}>
             {history.map((h, i) => (
               <div key={i}
-                onClick={() => { setUrl(h.url); setMethod(h.method as any); setHeaders(h.headers.length > 0 ? h.headers : [{ key: '', value: '' }]); setBody(h.body); setHistoryOpen(false) }}
+                onClick={() => { setUrl(h.url); setMethod(h.method as any); setHeaders(h.headers.length > 0 ? h.headers : [{ key: '', value: '' }]); setBody(h.body) }}
                 style={{ padding: '8px 12px', borderRadius: '6px', cursor: 'pointer', background: 'var(--bg-primary)', border: '1px solid var(--border)', fontSize: '13px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                 onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent)'}
                 onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
@@ -209,7 +207,7 @@ export default function ApiTester() {
               </div>
             ))}
           </div>
-        </details>
+        </div>
       )}
 
       {/* Request Body (for POST/PUT) */}
