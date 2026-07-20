@@ -20,6 +20,8 @@ const tools = [
   { path: '/json-repair', icon: '🔧', key: 'home.repair', desc: 'home.desc_repair' },
   { path: '/json-schema-generator', icon: '📋', key: 'home.schema_gen', desc: 'home.desc_schema_gen' },
   { path: '/json-code-generator', icon: '⚡', key: 'home.codegen', desc: 'home.desc_codegen' },
+  { path: '/json-stats', icon: '📊', key: 'home.stats', desc: 'home.desc_stats' },
+  { path: '/json-flatten', icon: '📐', key: 'home.flatten', desc: 'home.desc_flatten' },
   { path: '/json-converter', icon: '🔀', key: 'home.converter_hub', desc: 'home.desc_converter_hub' },
 ]
 
