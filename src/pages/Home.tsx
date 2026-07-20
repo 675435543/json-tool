@@ -26,8 +26,8 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="JSON Tool Pro - Free Online JSON Formatter, Validator & Converter"
-        description="Free online JSON tools: format, validate, minify, diff, convert to CSV/Java/TypeScript, JSONPath query, JWT decode. Pure frontend — your data never leaves your browser."
+        title="JSON Tool Pro: 100% Private Online JSON Formatter & Toolkit"
+        description="Free online JSON formatter & toolkit. 100% client-side – your data stays private, never uploaded. Validate, minify, diff, convert to CSV/YAML/TS/Java. Try now!"
         keywords="JSON formatter, JSON validator, JSON to CSV, JSON beautifier, JSON minifier, JSON diff, JSON to TypeScript, JSON to Java, JSONPath, online JSON tools"
         canonicalPath="/"
       />
@@ -60,14 +60,14 @@ export default function Home() {
             <p>{t('home.feat_privacy_desc')}</p>
           </div>
           <div className="feature-card">
-            <div className="feature-icon">⚡</div>
-            <h4>{t('home.feat_fast')}</h4>
-            <p>{t('home.feat_fast_desc')}</p>
+            <div className="feature-icon">🛠</div>
+            <h4>{t('home.feat_allinone')}</h4>
+            <p>{t('home.feat_allinone_desc')}</p>
           </div>
           <div className="feature-card">
-            <div className="feature-icon">🌍</div>
-            <h4>{t('home.feat_i18n')}</h4>
-            <p>{t('home.feat_i18n_desc')}</p>
+            <div className="feature-icon">💰</div>
+            <h4>{t('home.feat_free')}</h4>
+            <p>{t('home.feat_free_desc')}</p>
           </div>
         </div>
       </section>

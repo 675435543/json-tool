@@ -144,8 +144,8 @@
   "contact.response": "We will respond to your inquiry as soon as possible.",
   "theme.light": "Switch to light mode",
   "theme.dark": "Switch to dark mode",
-  "home.hero_title": "Free Online JSON Tools for Developers",
-  "home.hero_sub": "Format, validate, convert, and debug JSON — all in your browser. No uploads, no servers, 100% private.",
+  "home.hero_title": "15+ Free Online JSON Tools — Format, Validate, Convert & More",
+  "home.hero_sub": "The all-in-one JSON toolkit that runs 100% in your browser. Your data never leaves your device. Format JSON, validate syntax, convert to CSV/YAML/Java/TypeScript, diff documents, and more — all free, no sign-up.",
   "home.tools_title": "All JSON Tools",
   "home.features_title": "Why Choose JSON Tool Pro",
   "home.formatter": "JSON Formatter",
@@ -178,10 +178,10 @@
   "home.desc_json_viewer": "Explore JSON with interactive collapsible tree view",
   "home.converter_hub": "JSON Converter Hub",
   "home.desc_converter_hub": "All conversion tools in one place: CSV, Java, TS, YAML",
-  "home.feat_privacy": "100% Private",
-  "home.feat_privacy_desc": "All processing happens in your browser. Your JSON data never leaves your device.",
-  "home.feat_fast": "Lightning Fast",
-  "home.feat_fast_desc": "Instant formatting and validation. No server roundtrips, no waiting.",
-  "home.feat_i18n": "Multi-Language",
-  "home.feat_i18n_desc": "Available in English, Chinese, Spanish, and Arabic."
+  "home.feat_privacy": "Your Data Never Leaves Your Browser",
+  "home.feat_privacy_desc": "100% client-side processing. No server uploads, no backend storage, no third-party access. Your sensitive JSON data stays on your device, always.",
+  "home.feat_allinone": "15+ Tools, One Workspace",
+  "home.feat_allinone_desc": "From formatting and validation to conversion and code generation — everything you need for JSON development, all in one place. No more tab-hopping between separate tools.",
+  "home.feat_free": "Completely Free, No Limits",
+  "home.feat_free_desc": "No registration. No subscription tiers. No hidden premium features. Every tool is free to use, as much as you need, whenever you need it."
 }

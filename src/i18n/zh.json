@@ -144,8 +144,8 @@
   "contact.response": "我们将尽快回复您的咨询。",
   "theme.light": "切换到浅色主题",
   "theme.dark": "切换到深色主题",
-  "home.hero_title": "免费在线 JSON 开发者工具",
-  "home.hero_sub": "格式化、校验、转换、调试 JSON — 一切都在浏览器中完成。无需上传，无服务器，100% 保护隐私。",
+  "home.hero_title": "15+ 款免费在线 JSON 工具 — 格式化、校验、转换及更多",
+  "home.hero_sub": "一站式 JSON 工具集，100% 在浏览器中运行。你的数据永不离开设备。JSON 格式化、语法校验、转换为 CSV/YAML/Java/TypeScript、文档对比等 — 全部免费，无需注册。",
   "home.tools_title": "全部 JSON 工具",
   "home.features_title": "为什么选择 JSON Tool Pro",
   "home.formatter": "JSON 格式化",
@@ -178,10 +178,10 @@
   "home.desc_json_viewer": "通过交互式可折叠树视图浏览 JSON",
   "home.converter_hub": "JSON 转换中心",
   "home.desc_converter_hub": "所有转换工具集中一处：CSV、Java、TS、YAML",
-  "home.feat_privacy": "100% 隐私保护",
-  "home.feat_privacy_desc": "所有处理都在浏览器中进行。你的 JSON 数据不会离开你的设备。",
-  "home.feat_fast": "极速处理",
-  "home.feat_fast_desc": "即时格式化和校验。无需服务器通信，无需等待。",
-  "home.feat_i18n": "多语言支持",
-  "home.feat_i18n_desc": "支持英文、中文、西班牙语和阿拉伯语。"
+  "home.feat_privacy": "你的数据永不离开浏览器",
+  "home.feat_privacy_desc": "100% 客户端处理。无服务器上传，无后端存储，无第三方访问。你的敏感 JSON 数据始终留在你的设备上。",
+  "home.feat_allinone": "15+ 工具，一站搞定",
+  "home.feat_allinone_desc": "从格式化、校验到转换和代码生成 — JSON 开发所需的一切，尽在一处。无需在多个工具之间来回切换。",
+  "home.feat_free": "完全免费，无限制",
+  "home.feat_free_desc": "无需注册。无订阅层级。无隐藏付费功能。每个工具都完全免费，想用多少用多少。"
 }
