@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import SEO from '../../components/SEO'
 import { parseError } from '../../lib/utils'
+import { useKeyboardShortcuts } from '../../lib/useShortcuts'
 
 export default function JsonValidator() {
   const { t } = useTranslation()

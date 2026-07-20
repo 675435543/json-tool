@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect, type DragEvent, type ChangeEv
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import SEO from '../../components/SEO'
-import { codegenLanguages, sqlDialects, type CodegenEntry } from '../../codegen'
+import { codegenLanguages, sqlDialects } from '../../codegen'
 
 export default function JsonCodeGen() {
   const { t } = useTranslation()

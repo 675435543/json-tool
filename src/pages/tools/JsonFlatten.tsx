@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, type ChangeEvent } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import SEO from '../../components/SEO'
@@ -98,15 +98,22 @@ export default function JsonFlatten() {
         <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>{t('flatten.subtitle')}</p>
       </section>
 
-      {toast && (
-        <div style={{ position: 'fixed', top: '80px', left: '50%', transform: 'translateX(-50%)', zIndex: 1000, padding: '12px 24px', borderRadius: '8px', fontSize: '14px',
-          background: toast.type === 'success' ? 'var(--success-bg)' : toast.type === 'error' ? 'var(--danger-bg)' : 'var(--info-bg)',
-          color: toast.type === 'success' ? 'var(--success-text)' : toast.type === 'error' ? 'var(--danger-text)' : 'var(--info-text)',
-          border: `1px solid ...`,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
-          {toast.msg}
-        </div>
-      )}
+      {toast && (() => {
+        const t = toast.type
+        const bg = t === 'success' ? 'var(--success-bg)' : t === 'error' ? 'var(--danger-bg)' : 'var(--info-bg)'
+        const fg = t === 'success' ? 'var(--success-text)' : t === 'error' ? 'var(--danger-text)' : 'var(--info-text)'
+        const bd = t === 'success' ? 'var(--success-border)' : t === 'error' ? 'var(--danger-border)' : 'var(--info-border)'
+        return (
+          <div style={{
+            position: 'fixed', top: '80px', left: '50%', transform: 'translateX(-50%)', zIndex: 1000,
+            padding: '12px 24px', borderRadius: '8px', fontSize: '14px',
+            background: bg, color: fg, border: '1px solid ' + bd,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          }}>
+            {toast.msg}
+          </div>
+        )
+      })()}
 
       <div className="tool-controls" style={{ display: 'flex', gap: '12px', marginBottom: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
         <div style={{ display: 'flex', gap: '6px', background: 'var(--bg-tertiary)', padding: '3px', borderRadius: '8px' }}>
