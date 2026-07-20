@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import SEO from '../../components/SEO'
 import { tryParseJSON, parseError, jsonToCSV, generateJavaClass, generateTSInterfaces } from '../../lib/utils'
 import { codegenLanguages, sqlDialects, type CodegenEntry } from '../../codegen'
+import { useKeyboardShortcuts } from '../../lib/useShortcuts'
 import TreeView from '../../TreeView'
 
 export default function JsonFormatter() {
@@ -183,6 +184,13 @@ export default function JsonFormatter() {
   }, [])
 
   useEffect(() => { return () => { if (toastTimer.current) clearTimeout(toastTimer.current) } }, [])
+
+  useKeyboardShortcuts([
+    { key: 'Enter', ctrl: true, handler: () => doFormat(2) },
+    { key: 'Enter', ctrl: true, shift: true, handler: () => doFormat(0) },
+    { key: 'd', ctrl: true, handler: handleCopy },
+    { key: 'l', ctrl: true, handler: handleClear },
+  ])
 
   return (
     <>

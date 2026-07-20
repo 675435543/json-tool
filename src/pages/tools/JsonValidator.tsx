@@ -29,6 +29,10 @@ export default function JsonValidator() {
     reader.readAsText(file)
   }, [t])
 
+  useKeyboardShortcuts([
+    { key: 'Enter', ctrl: true, handler: handleValidate },
+  ])
+
   return (
     <>
       <SEO
