@@ -10,6 +10,8 @@ const posts = [
   { slug: 'json-formatter-vs-beautifier-vs-minifier', title: "JSON Formatter vs Beautifier vs Minifier — What's the Difference?", excerpt: 'Learn the key differences between formatting, beautifying, and minifying JSON. When to use each tool.', date: '2026-07-18' },
   { slug: 'top-json-tools', title: 'Top 10 Free JSON Tools Every Developer Needs in 2026', excerpt: 'Discover the best free JSON tools for developers: formatter, validator, diff checker, converters, and more.', date: '2026-07-18' },
   { slug: 'json-rest-api-best-practices', title: 'JSON Best Practices for REST API Design — Developer Guide', excerpt: 'Naming conventions, error handling, pagination, versioning, and security for JSON REST APIs.', date: '2026-07-18' },
+  { slug: 'json-to-go-struct', title: 'JSON to Go Struct — Generate Go Types from JSON Automatically', excerpt: 'Learn how to convert JSON to Go struct types. Free online JSON to Go generator, manual conversion guide, and best practices for defining Go data structures.', date: '2026-07-22' },
+  { slug: 'json-schema-validator-guide', title: 'JSON Schema Validator Guide — Validate JSON Data Like a Pro', excerpt: 'Complete guide to JSON Schema validation. Learn how to define schemas, validate data, use our free online JSON Schema validator, and ensure API data quality.', date: '2026-07-22' },
 ]
 
 export default function BlogIndex() {

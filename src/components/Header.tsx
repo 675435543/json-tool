@@ -16,9 +16,10 @@ interface HeaderProps {
   switchLang: (code: string) => void
   langRef: React.RefObject<HTMLDivElement | null>
   showBack?: boolean
+  onOpenSearch?: () => void
 }
 
-export default function Header({ isLight, toggleTheme, langOpen, setLangOpen, switchLang, langRef, showBack }: HeaderProps) {
+export default function Header({ isLight, toggleTheme, langOpen, setLangOpen, switchLang, langRef, showBack, onOpenSearch }: HeaderProps) {
   const { t, i18n } = useTranslation()
   const currentLang = LANG_OPTIONS.find(l => l.code === i18n.language) || LANG_OPTIONS[0]
 
@@ -31,6 +32,11 @@ export default function Header({ isLight, toggleTheme, langOpen, setLangOpen, sw
           </Link>
         </h1>
         <div className="lang-switcher" ref={langRef}>
+          {onOpenSearch && (
+            <button className="search-btn" onClick={onOpenSearch} title={t('search.open') || 'Search tools'}>
+              🔍
+            </button>
+          )}
           <button className="theme-btn" onClick={toggleTheme} title={isLight ? t('theme.dark') : t('theme.light')}>
             {isLight ? '🌙' : '☀️'}
           </button>

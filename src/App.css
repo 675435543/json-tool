@@ -153,7 +153,8 @@ header h1 {
   position: relative;
 }
 
-.lang-btn {
+.lang-btn,
+.search-btn {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   color: var(--text-primary);
@@ -163,6 +164,12 @@ header h1 {
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.15s;
+}
+
+.search-btn {
+  font-size: 16px;
+  padding: 6px 10px;
+  line-height: 1;
 }
 
 .lang-btn:hover {

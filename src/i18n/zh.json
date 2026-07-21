@@ -190,6 +190,7 @@
   "home.usecase_data_link": "JSON 转 CSV",
   "search.placeholder": "搜索工具...",
   "search.no_results": "未找到匹配的工具",
+  "search.open": "搜索工具 (Ctrl+K)",
   "home.hero_title": "15+ 款免费在线 JSON 工具 — 格式化、校验、转换及更多",
   "home.hero_sub": "一站式 JSON 工具集，100% 在浏览器中运行。你的数据永不离开设备。JSON 格式化、语法校验、转换为 CSV/YAML/Java/TypeScript、文档对比等 — 全部免费，无需注册。",
   "home.tools_title": "全部 JSON 工具",

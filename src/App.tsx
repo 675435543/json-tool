@@ -34,6 +34,8 @@ import BlogJsonFormatterGuide from './pages/blog/JsonFormatterGuide'
 import BlogTopTools from './pages/blog/TopTools'
 import BlogRestApi from './pages/blog/RestApi'
 import BlogJsonErrors from './pages/blog/JsonErrors'
+import BlogJsonToGo from './pages/blog/JsonToGo'
+import BlogJsonSchemaValidatorGuide from './pages/blog/JsonSchemaValidatorGuide'
 import JsonConverterHub from './pages/JsonConverterHub'
 import Privacy from './pages/Privacy'
 import Contact from './pages/Contact'
@@ -79,7 +81,7 @@ export default function App() {
 
   return (
     <div className="container">
-      <Header isLight={isLight} toggleTheme={toggleTheme} langOpen={langOpen} setLangOpen={setLangOpen} switchLang={switchLang} langRef={langRef} />
+      <Header isLight={isLight} toggleTheme={toggleTheme} langOpen={langOpen} setLangOpen={setLangOpen} switchLang={switchLang} langRef={langRef} onOpenSearch={() => setSearchOpen(true)} />
       <ToolSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -114,6 +116,8 @@ export default function App() {
         <Route path="/blog/top-json-tools" element={<BlogTopTools />} />
         <Route path="/blog/json-rest-api-best-practices" element={<BlogRestApi />} />
         <Route path="/blog/10-common-json-errors" element={<BlogJsonErrors />} />
+        <Route path="/blog/json-to-go-struct" element={<BlogJsonToGo />} />
+        <Route path="/blog/json-schema-validator-guide" element={<BlogJsonSchemaValidatorGuide />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>

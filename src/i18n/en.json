@@ -190,6 +190,7 @@
   "home.usecase_data_link": "JSON to CSV",
   "search.placeholder": "Search tools...",
   "search.no_results": "No tools found",
+  "search.open": "Search tools (Ctrl+K)",
   "home.hero_title": "15+ Free Online JSON Tools — Format, Validate, Convert & More",
   "home.hero_sub": "The all-in-one JSON toolkit that runs 100% in your browser. Your data never leaves your device. Format JSON, validate syntax, convert to CSV/YAML/Java/TypeScript, diff documents, and more — all free, no sign-up.",
   "home.tools_title": "All JSON Tools",
