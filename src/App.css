@@ -802,16 +802,24 @@ footer {
 }
 
 /* ===== Generator Area ===== */
-.gen-area {
-  padding: 16px;
-  background: var(--bg-secondary);
-  border-radius: 12px;
+.gen-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
 }
 
-.gen-area label {
-  color: var(--text-secondary);
+.gen-count-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gen-label {
+  font-weight: 600;
   font-size: 14px;
-  margin-right: 12px;
+  color: var(--text-heading);
 }
 
 .gen-input {
@@ -822,7 +830,52 @@ footer {
   padding: 8px 12px;
   font-size: 14px;
   width: 80px;
-  margin-right: 12px;
+}
+
+.gen-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gen-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 12px;
+}
+
+.gen-tab {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.gen-tab:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.gen-tab:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.gen-tab:not(:last-child) {
+  border-right: none;
+}
+
+.gen-tab.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.gen-tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* ===== Codegen Dropdown ===== */
