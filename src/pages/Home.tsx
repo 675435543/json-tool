@@ -1,68 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import SEO from '../components/SEO'
-
-interface ToolItem {
-  path: string
-  icon: string
-  key: string
-  desc: string
-}
-
-interface ToolCategory {
-  icon: string
-  titleKey: string
-  tools: ToolItem[]
-}
-
-const categories: ToolCategory[] = [
-  {
-    icon: '🛠',
-    titleKey: 'home.cat_format',
-    tools: [
-      { path: '/json-formatter', icon: '✨', key: 'home.formatter', desc: 'home.desc_formatter' },
-      { path: '/json-validator', icon: '✅', key: 'home.validator', desc: 'home.desc_validator' },
-      { path: '/json-compressor', icon: '📦', key: 'home.compressor', desc: 'home.desc_compressor' },
-      { path: '/json-repair', icon: '🔧', key: 'home.repair', desc: 'home.desc_repair' },
-      { path: '/json-viewer', icon: '🌳', key: 'home.json_viewer', desc: 'home.desc_json_viewer' },
-    ],
-  },
-  {
-    icon: '🔄',
-    titleKey: 'home.cat_convert',
-    tools: [
-      { path: '/json-to-csv', icon: '📊', key: 'home.to_csv', desc: 'home.desc_csv' },
-      { path: '/csv-to-json', icon: '🔄', key: 'home.csv_to_json', desc: 'home.desc_csv_to_json' },
-      { path: '/json-to-yaml', icon: '📝', key: 'home.to_yaml', desc: 'home.desc_yaml' },
-      { path: '/json-to-typescript', icon: '🔷', key: 'home.to_ts', desc: 'home.desc_ts' },
-      { path: '/json-to-java', icon: '☕', key: 'home.to_java', desc: 'home.desc_java' },
-      { path: '/json-flatten', icon: '📐', key: 'home.flatten', desc: 'home.desc_flatten' },
-      { path: '/json-converter', icon: '🔀', key: 'home.converter_hub', desc: 'home.desc_converter_hub' },
-    ],
-  },
-  {
-    icon: '⚡',
-    titleKey: 'home.cat_codegen',
-    tools: [
-      { path: '/json-code-generator', icon: '⚡', key: 'home.codegen', desc: 'home.desc_codegen' },
-      { path: '/json-schema-generator', icon: '📋', key: 'home.schema_gen', desc: 'home.desc_schema_gen' },
-      { path: '/json-generator', icon: '⚡', key: 'home.generator', desc: 'home.desc_generator' },
-      { path: '/json-schema-validator', icon: '📋', key: 'home.schema_validator', desc: 'home.desc_schema_validator' },
-    ],
-  },
-  {
-    icon: '🔍',
-    titleKey: 'home.cat_devtools',
-    tools: [
-      { path: '/json-playground', icon: '🎮', key: 'home.playground', desc: 'home.desc_playground' },
-      { path: '/jsonpath', icon: '🔍', key: 'home.jsonpath', desc: 'home.desc_jsonpath' },
-      { path: '/json-diff', icon: '🔄', key: 'home.diff', desc: 'home.desc_diff' },
-      { path: '/jwt-decode', icon: '🔓', key: 'home.jwt', desc: 'home.desc_jwt' },
-      { path: '/json-stats', icon: '📊', key: 'home.stats', desc: 'home.desc_stats' },
-      { path: '/api-tester', icon: '🚀', key: 'home.api_tester', desc: 'home.desc_api_tester' },
-    ],
-  },
-]
+import { toolCategories } from '../lib/tools'
 
 export default function Home() {
   const { t } = useTranslation()
@@ -75,12 +14,80 @@ export default function Home() {
         keywords="JSON formatter, JSON validator, JSON to CSV, JSON beautifier, JSON minifier, JSON diff, JSON to TypeScript, JSON to Java, JSONPath, online JSON tools"
         canonicalPath="/"
       />
+
+      {/* ===== Hero ===== */}
       <section className="home-hero">
-        <h2 className="home-hero-title">{t('home.hero_title')}</h2>
+        <div className="hero-badge">{t('home.hero_badge')}</div>
+        <h1 className="home-hero-title">{t('home.hero_heading')}</h1>
         <p className="home-hero-sub">{t('home.hero_sub')}</p>
+        <div className="hero-actions">
+          <Link to="/json-playground" className="btn hero-cta hero-cta-primary">{t('home.hero_cta')} →</Link>
+          <span className="hero-hint">
+            <kbd>Ctrl</kbd>+<kbd>K</kbd> {t('home.hero_hint')}
+          </span>
+        </div>
       </section>
 
-      {categories.map(cat => (
+      {/* ===== Three Selling Points ===== */}
+      <section className="home-usp">
+        <div className="usp-card">
+          <div className="usp-icon">🔒</div>
+          <h3>{t('home.usp_privacy_title')}</h3>
+          <p>{t('home.usp_privacy_desc')}</p>
+        </div>
+        <div className="usp-card">
+          <div className="usp-icon">⚡</div>
+          <h3>{t('home.usp_speed_title')}</h3>
+          <p>{t('home.usp_speed_desc')}</p>
+        </div>
+        <div className="usp-card">
+          <div className="usp-icon">🛠</div>
+          <h3>{t('home.usp_tools_title')}</h3>
+          <p>{t('home.usp_tools_desc')}</p>
+        </div>
+      </section>
+
+      {/* ===== Use Cases ===== */}
+      <section className="home-use-cases">
+        <h2 className="home-section-title">{t('home.usecases_title')}</h2>
+        <div className="usecases-grid">
+          <div className="usecase-card">
+            <div className="usecase-icon">🌐</div>
+            <div className="usecase-body">
+              <h4>{t('home.usecase_api')}</h4>
+              <p>{t('home.usecase_api_desc')}</p>
+              <Link to="/json-diff" className="usecase-link">{t('home.usecase_api_link')} →</Link>
+            </div>
+          </div>
+          <div className="usecase-card">
+            <div className="usecase-icon">⚛️</div>
+            <div className="usecase-body">
+              <h4>{t('home.usecase_frontend')}</h4>
+              <p>{t('home.usecase_frontend_desc')}</p>
+              <Link to="/json-to-typescript" className="usecase-link">{t('home.usecase_frontend_link')} →</Link>
+            </div>
+          </div>
+          <div className="usecase-card">
+            <div className="usecase-icon">☕</div>
+            <div className="usecase-body">
+              <h4>{t('home.usecase_backend')}</h4>
+              <p>{t('home.usecase_backend_desc')}</p>
+              <Link to="/json-to-java" className="usecase-link">{t('home.usecase_backend_link')} →</Link>
+            </div>
+          </div>
+          <div className="usecase-card">
+            <div className="usecase-icon">📊</div>
+            <div className="usecase-body">
+              <h4>{t('home.usecase_data')}</h4>
+              <p>{t('home.usecase_data_desc')}</p>
+              <Link to="/json-to-csv" className="usecase-link">{t('home.usecase_data_link')} →</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== Tool Categories ===== */}
+      {toolCategories.map(cat => (
         <section key={cat.titleKey} className="home-tools">
           <h3 className="home-section-title">{cat.icon} {t(cat.titleKey)}</h3>
           <div className="tool-grid">
@@ -88,8 +95,8 @@ export default function Home() {
               <Link key={tool.path} to={tool.path} className="tool-card">
                 <span className="tool-card-icon">{tool.icon}</span>
                 <div>
-                  <div className="tool-card-title">{t(tool.key)}</div>
-                  <div className="tool-card-desc">{t(tool.desc)}</div>
+                  <div className="tool-card-title">{t(tool.nameKey)}</div>
+                  <div className="tool-card-desc">{t(tool.descKey)}</div>
                 </div>
               </Link>
             ))}
@@ -97,8 +104,9 @@ export default function Home() {
         </section>
       ))}
 
+      {/* ===== Features ===== */}
       <section className="home-features">
-        <h3 className="home-section-title">{t('home.features_title')}</h3>
+        <h2 className="home-section-title">{t('home.features_title')}</h2>
         <div className="features-grid">
           <div className="feature-card">
             <div className="feature-icon">🔒</div>

@@ -38,10 +38,12 @@ import JsonConverterHub from './pages/JsonConverterHub'
 import Privacy from './pages/Privacy'
 import Contact from './pages/Contact'
 import './App.css'
+import ToolSearch from './components/ToolSearch'
 
 export default function App() {
   const { i18n } = useTranslation()
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark')
+  const [searchOpen, setSearchOpen] = useState(false)
   const isLight = theme === 'light'
   const [langOpen, setLangOpen] = useState(false)
   const langRef = useRef<HTMLDivElement>(null)
@@ -51,6 +53,7 @@ export default function App() {
     localStorage.setItem('theme', theme)
   }, [theme, isLight])
 
+  // Close lang dropdown on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false)
@@ -59,12 +62,25 @@ export default function App() {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
+  // Global Ctrl+K / Cmd+K for tool search
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault()
+        setSearchOpen(prev => !prev)
+      }
+    }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [])
+
   const toggleTheme = useCallback(() => setTheme(prev => prev === 'dark' ? 'light' : 'dark'), [])
   const switchLang = useCallback((code: string) => { i18n.changeLanguage(code); setLangOpen(false) }, [i18n])
 
   return (
     <div className="container">
       <Header isLight={isLight} toggleTheme={toggleTheme} langOpen={langOpen} setLangOpen={setLangOpen} switchLang={switchLang} langRef={langRef} />
+      <ToolSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/json-formatter" element={<JsonFormatter />} />
