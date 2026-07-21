@@ -2,19 +2,33 @@ import { useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import SEO from '../../components/SEO'
-import { tryParseJSON, diffJSON, type DiffEntry } from '../../lib/utils'
+import { tryParseJSON, diffJSON, renderVisualDiff, type DiffEntry } from '../../lib/utils'
 
 export default function JsonDiff() {
   const { t } = useTranslation()
   const [a, setA] = useState('')
   const [b, setB] = useState('')
-  const [result, setResult] = useState<DiffEntry[] | null>(null)
+  const [diffEntries, setDiffEntries] = useState<DiffEntry[] | null>(null)
 
   const handleCompare = useCallback(() => {
     const pa = tryParseJSON(a.trim()), pb = tryParseJSON(b.trim())
-    if (!pa || !pb) { setResult([{ path: 'Input', type: 'modified', a: 'Invalid JSON in one or both panels', b: '' }]); return }
-    setResult(diffJSON(pa, pb))
+    if (!pa || !pb) { setDiffEntries(null); return }
+    setDiffEntries(diffJSON(pa, pb) as DiffEntry[])
   }, [a, b])
+
+  const [example] = useState(() => {
+    const ea = JSON.stringify({ name: 'Tom', age: 25, city: 'Beijing' }, null, 2)
+    const eb = JSON.stringify({ name: 'Tommy', age: 25, city: 'Shanghai', job: 'Engineer' }, null, 2)
+    return { a: ea, b: eb }
+  })
+
+  const loadExample = useCallback(() => {
+    setA(example.a)
+    setB(example.b)
+  }, [example])
+
+  const pa = tryParseJSON(a.trim())
+  const pb = tryParseJSON(b.trim())
 
   return (
     <>
@@ -28,6 +42,7 @@ export default function JsonDiff() {
 
       <div className="diff-toolbar">
         <button className="btn btn-purple diff-compare-btn" onClick={handleCompare}>🔍 {t('diff.compare')}</button>
+        <button className="btn btn-outline" onClick={loadExample} style={{ marginLeft: '8px' }}>📋 示例</button>
       </div>
 
       <div className="editor-area">
@@ -41,40 +56,56 @@ export default function JsonDiff() {
         </div>
       </div>
 
-      {result !== null && (
-        <div className="diff-result">
-          {result.length === 0 ? (
-            <div className="diff-same">{t('diff.same')}</div>
-          ) : (
-            <div className="diff-entries">
-              <div className="diff-summary">
-                {result.filter(d => d.type === 'added').length} {t('diff.added')} ·{' '}
-                {result.filter(d => d.type === 'removed').length} {t('diff.removed')} ·{' '}
-                {result.filter(d => d.type === 'modified').length} {t('diff.modified')}
-              </div>
-              {result.map((d, i) => (
-                <div key={i} className={`diff-entry diff-${d.type}`}>
-                  <div className="diff-path">{d.type === 'added' ? '+' : d.type === 'removed' ? '−' : '∼'} {d.path}</div>
-                  <div className="diff-value">
-                    {d.a && <div className="diff-a">- {d.a}</div>}
-                    {d.b && <div className="diff-b">+ {d.b}</div>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+      {diffEntries !== null && pa && pb && (
+        <VisualDiffViewer entries={diffEntries} parsedA={pa} parsedB={pb} />
       )}
-
-      <section style={{ marginTop: '32px', background: 'var(--bg-secondary)', borderRadius: '12px', padding: '24px', border: '1px solid var(--border)', lineHeight: '1.8' }}>
-        <h2 style={{ fontSize: '20px', marginBottom: '16px', color: 'var(--text-heading)' }}>When to Use JSON Diff</h2>
-        <div style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
-          <p>🔄 Compare API responses between environments (dev vs prod)</p>
-          <p>🔄 Check configuration file changes between versions</p>
-          <p>🔄 Verify data transformations and migrations</p>
-          <p>🔄 Debug unexpected JSON output differences</p>
-        </div>
-      </section>
     </>
+  )
+}
+
+function VisualDiffViewer({ entries, parsedA, parsedB }: {
+  entries: DiffEntry[]
+  parsedA: any
+  parsedB: any
+}) {
+  const { t } = useTranslation()
+
+  if (entries.length === 0) {
+    return <div className="diff-same" style={{ marginTop: '12px' }}>{t('diff.same')}</div>
+  }
+
+  const htmlA = renderVisualDiff(parsedA, entries, 'a')
+  const htmlB = renderVisualDiff(parsedB, entries, 'b')
+
+  const nAdded = entries.filter(e => e.type === 'added').length
+  const nRemoved = entries.filter(e => e.type === 'removed').length
+  const nModified = entries.filter(e => e.type === 'modified').length
+
+  return (
+    <div className="vdiff-container">
+      {/* Panel A — original */}
+      <div className="vdiff-panel">
+        <div className="vdiff-panel-header">
+          <span>{t('panel.json_a')}</span>
+          <span className="vdiff-summary">
+            {nRemoved > 0 && <span><span className="badge-rem">−{nRemoved}</span></span>}
+            {nModified > 0 && <span><span className="badge-mod">∼{nModified}</span></span>}
+          </span>
+        </div>
+        <pre className="vdiff-code" dangerouslySetInnerHTML={{ __html: htmlA }} />
+      </div>
+
+      {/* Panel B — new */}
+      <div className="vdiff-panel">
+        <div className="vdiff-panel-header">
+          <span>{t('panel.json_b')}</span>
+          <span className="vdiff-summary">
+            {nAdded > 0 && <span><span className="badge-add">+{nAdded}</span></span>}
+            {nModified > 0 && <span><span className="badge-mod">∼{nModified}</span></span>}
+          </span>
+        </div>
+        <pre className="vdiff-code" dangerouslySetInnerHTML={{ __html: htmlB }} />
+      </div>
+    </div>
   )
 }

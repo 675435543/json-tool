@@ -258,3 +258,159 @@ export function jsonToYaml(obj: any, indent: number): string {
   }
   return String(obj)
 }
+
+// ============ Visual JSON Diff (side-by-side HTML) ============
+
+export type VisualDiffType = 'added' | 'removed' | 'modified'
+
+/**
+ * Custom JSON-to-HTML serializer that highlights diff'ed leaf values
+ * by wrapping their line in a colored <span>.
+ */
+function serializeDiffJSON(
+  obj: any,
+  path: string,
+  depth: number,
+  indent: string,
+  diffMap: Map<string, VisualDiffType>,
+  lines: string[]
+): void {
+  const prefix = indent.repeat(depth)
+
+  if (obj === null || typeof obj !== 'object') {
+    // Primitive value
+    const valStr = obj === null ? 'null' :
+      typeof obj === 'string' ? JSON.stringify(obj) :
+      String(obj)
+    const diffType = diffMap.get(path)
+    if (diffType) {
+      const cls = diffType === 'added' ? 'vd-add' : diffType === 'removed' ? 'vd-rem' : 'vd-mod'
+      lines.push(`<span class="${cls}">${prefix}${valStr}</span>`)
+    } else {
+      lines.push(`${prefix}${valStr}`)
+    }
+    return
+  }
+
+  if (Array.isArray(obj)) {
+    if (obj.length === 0) {
+      const diffType = diffMap.get(path)
+      if (diffType) {
+        const cls = diffType === 'added' ? 'vd-add' : diffType === 'removed' ? 'vd-rem' : 'vd-mod'
+        lines.push(`<span class="${cls}">${prefix}[]</span>`)
+      } else {
+        lines.push(`${prefix}[]`)
+      }
+      return
+    }
+    lines.push(`${prefix}[`)
+    for (let i = 0; i < obj.length; i++) {
+      const childPath = `${path}[${i}]`
+      serializeDiffJSON(obj[i], childPath, depth + 1, indent, diffMap, lines)
+      if (i < obj.length - 1) {
+        // Append comma to the previous line
+        const lastIdx = lines.length - 1
+        const last = lines[lastIdx]
+        if (last.endsWith('</span>')) {
+          lines[lastIdx] = last.slice(0, -7) + ',</span>'
+        } else {
+          lines[lastIdx] = last + ','
+        }
+      }
+    }
+    lines.push(`${prefix}]`)
+    return
+  }
+
+  // Plain object
+  const keys = Object.keys(obj)
+  if (keys.length === 0) {
+    const diffType = diffMap.get(path)
+    if (diffType) {
+      const cls = diffType === 'added' ? 'vd-add' : diffType === 'removed' ? 'vd-rem' : 'vd-mod'
+      lines.push(`<span class="${cls}">${prefix}{}</span>`)
+    } else {
+      lines.push(`${prefix}{}`)
+    }
+    return
+  }
+
+  lines.push(`${prefix}{`)
+
+  keys.forEach((key, idx) => {
+    const childPath = path ? `${path}.${key}` : key
+    const val = obj[key]
+    const comma = idx < keys.length - 1
+    const indent1 = indent.repeat(depth + 1)
+    const quotedKey = JSON.stringify(key)
+
+    if (val === null || typeof val !== 'object') {
+      // Simple value — put on one line: "key": value,
+      const valStr = val === null ? 'null' :
+        typeof val === 'string' ? JSON.stringify(val) :
+        String(val)
+      const content = `${indent1}${quotedKey}: ${valStr}${comma ? ',' : ''}`
+      const diffType = diffMap.get(childPath)
+      if (diffType) {
+        const cls = diffType === 'added' ? 'vd-add' : diffType === 'removed' ? 'vd-rem' : 'vd-mod'
+        lines.push(`<span class="${cls}">${content}</span>`)
+      } else {
+        lines.push(content)
+      }
+    } else if (Array.isArray(val) && val.length === 0) {
+      const content = `${indent1}${quotedKey}: []${comma ? ',' : ''}`
+      const diffType = diffMap.get(childPath)
+      if (diffType) {
+        const cls = diffType === 'added' ? 'vd-add' : diffType === 'removed' ? 'vd-rem' : 'vd-mod'
+        lines.push(`<span class="${cls}">${content}</span>`)
+      } else {
+        lines.push(content)
+      }
+    } else {
+      // Object or non-empty array as value
+      lines.push(`${indent1}${quotedKey}:`)
+      serializeDiffJSON(val, childPath, depth + 1, indent, diffMap, lines)
+      // Comma goes on the last line of the value
+      if (comma) {
+        const lastIdx = lines.length - 1
+        const last = lines[lastIdx]
+        if (last.endsWith('</span>')) {
+          lines[lastIdx] = last.slice(0, -7) + ',</span>'
+        } else {
+          lines[lastIdx] = last + ','
+        }
+      }
+    }
+  })
+
+  lines.push(`${prefix}}`)
+}
+
+/**
+ * Render a visual diff panel for one side.
+ * @returns HTML string with color-coded <span> elements.
+ */
+export function renderVisualDiff(
+  parsedJSON: any,
+  diffEntries: DiffEntry[],
+  side: 'a' | 'b'
+): string {
+  const diffMap = new Map<string, VisualDiffType>()
+  for (const entry of diffEntries) {
+    // For side 'a': show removed in red, modified in yellow
+    // For side 'b': show added in green, modified in yellow
+    if (side === 'a') {
+      if (entry.type === 'removed' || entry.type === 'modified') {
+        diffMap.set(entry.path, entry.type)
+      }
+    } else {
+      if (entry.type === 'added' || entry.type === 'modified') {
+        diffMap.set(entry.path, entry.type)
+      }
+    }
+  }
+
+  const lines: string[] = []
+  serializeDiffJSON(parsedJSON, '', 0, '  ', diffMap, lines)
+  return lines.join('\n')
+}

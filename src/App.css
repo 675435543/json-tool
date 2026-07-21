@@ -1477,3 +1477,103 @@ footer {
   color: var(--text-secondary);
   line-height: 1.4;
 }
+
+/* ===== Visual Diff ===== */
+.vdiff-container {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.vdiff-panel {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.vdiff-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border);
+}
+
+.vdiff-code {
+  padding: 14px;
+  margin: 0;
+  font-size: 13px;
+  font-family: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: auto;
+  max-height: 600px;
+  color: var(--text-primary);
+}
+
+.vdiff-code .vd-add {
+  display: inline-block;
+  width: 100%;
+  background: rgba(0, 200, 83, 0.12);
+  border-left: 3px solid #00c853;
+  padding-left: 8px;
+  box-sizing: border-box;
+  border-radius: 2px;
+}
+
+.vdiff-code .vd-rem {
+  display: inline-block;
+  width: 100%;
+  background: rgba(255, 82, 82, 0.12);
+  border-left: 3px solid #ff5252;
+  padding-left: 8px;
+  box-sizing: border-box;
+  border-radius: 2px;
+}
+
+.vdiff-code .vd-mod {
+  display: inline-block;
+  width: 100%;
+  background: rgba(255, 193, 7, 0.12);
+  border-left: 3px solid #ffc107;
+  padding-left: 8px;
+  box-sizing: border-box;
+  border-radius: 2px;
+}
+
+.light-theme .vdiff-code .vd-add {
+  background: rgba(0, 200, 83, 0.08);
+}
+.light-theme .vdiff-code .vd-rem {
+  background: rgba(255, 82, 82, 0.08);
+}
+.light-theme .vdiff-code .vd-mod {
+  background: rgba(255, 193, 7, 0.08);
+}
+
+.vdiff-summary {
+  display: flex;
+  gap: 16px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border);
+}
+
+.vdiff-summary span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.vdiff-summary .badge-add { color: #00c853; font-weight: 700; }
+.vdiff-summary .badge-rem { color: #ff5252; font-weight: 700; }
+.vdiff-summary .badge-mod { color: #ffc107; font-weight: 700; }
