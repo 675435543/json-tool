@@ -228,9 +228,8 @@ function fixUnquotedKeys(text: string): string {
 }
 
 function fixMissingClosing(text: string): string {
-  // Try to count brackets and add missing ones
-  let openBraces = 0
-  let openBrackets = 0
+  // Use a stack to track opening order, so we close in reverse (LIFO)
+  const stack: Array<'{' | '['> = []
   let inString = false
 
   for (let i = 0; i < text.length; i++) {
@@ -250,20 +249,25 @@ function fixMissingClosing(text: string): string {
       continue
     }
 
-    if (ch === '{') openBraces++
-    else if (ch === '}') openBraces--
-    else if (ch === '[') openBrackets++
-    else if (ch === ']') openBrackets--
+    if (ch === '{') {
+      stack.push('{')
+    } else if (ch === '}') {
+      if (stack.length > 0 && stack[stack.length - 1] === '{') {
+        stack.pop()
+      }
+    } else if (ch === '[') {
+      stack.push('[')
+    } else if (ch === ']') {
+      if (stack.length > 0 && stack[stack.length - 1] === '[') {
+        stack.pop()
+      }
+    }
   }
 
+  // Close in reverse order (LIFO)
   let result = text
-  while (openBraces > 0) {
-    result += '}'
-    openBraces--
-  }
-  while (openBrackets > 0) {
-    result += ']'
-    openBrackets--
+  for (let i = stack.length - 1; i >= 0; i--) {
+    result += stack[i] === '{' ? '}' : ']'
   }
 
   return result
