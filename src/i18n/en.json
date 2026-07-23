@@ -368,6 +368,8 @@
   "md.clear": "Clear",
   "md.editor": "Editor",
   "md.preview": "Preview",
+  "md.expand": "Expand",
+  "md.shrink": "Shrink",
 
   "base64.encode": "Encode",
   "base64.decode": "Decode",

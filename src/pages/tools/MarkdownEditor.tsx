@@ -17,6 +17,7 @@ export default function MarkdownEditor() {
   const [html, setHtml] = useState('')
   const [htmlCopied, setHtmlCopied] = useState(false)
   const [htmlExported, setHtmlExported] = useState(false)
+  const [fullscreen, setFullscreen] = useState(false)
   const previewRef = useRef<HTMLDivElement>(null)
 
   // Persist content to localStorage
@@ -127,9 +128,12 @@ img{max-width:100%}
         <button className="btn btn-purple" onClick={handleExportPdf}>📕 PDF</button>
         <button className="btn btn-purple" onClick={handleExportWord}>📘 Word</button>
         <button className="btn btn-purple" onClick={handleClear}>🗑️ {t('md.clear') || 'Clear'}</button>
+        <button className="btn btn-outline" onClick={() => setFullscreen(v => !v)} style={{ marginLeft: 'auto' }}>
+          {fullscreen ? '⤵ ' + (t('md.shrink') || 'Shrink') : '⤴ ' + (t('md.expand') || 'Expand')}
+        </button>
       </div>
 
-      <div className="editor-area" style={{ height: '70vh' }}>
+      <div className="editor-area" style={{ height: fullscreen ? 'calc(100vh - 200px)' : '75vh', transition: 'height 0.2s ease' }}>
         <div className="editor-panel" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <div className="panel-header"><span>✍️ {t('md.editor') || 'Editor'}</span></div>
           <textarea

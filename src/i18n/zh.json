@@ -368,6 +368,8 @@
   "md.clear": "清空",
   "md.editor": "编辑器",
   "md.preview": "预览",
+  "md.expand": "展开",
+  "md.shrink": "收缩",
 
   "base64.encode": "编码",
   "base64.decode": "解码",

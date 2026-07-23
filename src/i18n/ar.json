@@ -159,6 +159,8 @@
   "md.clear": "مسح",
   "md.editor": "المحرر",
   "md.preview": "معاينة",
+  "md.expand": "توسيع",
+  "md.shrink": "تصغير",
 
   "base64.encode": "ترميز",
   "base64.decode": "فك",

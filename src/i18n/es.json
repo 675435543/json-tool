@@ -159,6 +159,8 @@
   "md.clear": "Limpiar",
   "md.editor": "Editor",
   "md.preview": "Vista previa",
+  "md.expand": "Expandir",
+  "md.shrink": "Contraer",
 
   "base64.encode": "Codificar",
   "base64.decode": "Decodificar",
