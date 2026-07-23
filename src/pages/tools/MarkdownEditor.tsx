@@ -15,7 +15,8 @@ export default function MarkdownEditor() {
   const { t } = useTranslation()
   const [input, setInput] = useState(localStorage.getItem('md_editor_content') || `# Welcome to Markdown Editor\n\nStart typing **Markdown** on the left, see the preview on the right.\n\n## Features\n\n- **Bold**, *italic*, ~~strikethrough~~\n- \`Inline code\` and code blocks\n- Tables and lists\n- [Links](https://example.com)\n\n### Code Example\n\n\`\`\`javascript\nfunction greet(name) {\n  return \`Hello, \${name}!\`;\n}\n\`\`\`\n\n> Blockquote for emphasis\n\n---\n\n| Feature | Status |\n|---------|--------|\n| GFM | ✅ |\n| Tables | ✅ |\n| Syntax Highlight | ✅ |\n`)
   const [html, setHtml] = useState('')
-  const [copied, setCopied] = useState(false)
+  const [htmlCopied, setHtmlCopied] = useState(false)
+  const [htmlExported, setHtmlExported] = useState(false)
   const previewRef = useRef<HTMLDivElement>(null)
 
   // Persist content to localStorage
@@ -45,8 +46,8 @@ export default function MarkdownEditor() {
   const handleCopyHtml = async () => {
     try {
       await navigator.clipboard.writeText(html)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      setHtmlCopied(true)
+      setTimeout(() => setHtmlCopied(false), 2000)
     } catch { /* ignore */ }
   }
 
@@ -63,6 +64,51 @@ export default function MarkdownEditor() {
     a.download = 'markdown-export.html'
     a.click()
     URL.revokeObjectURL(url)
+    setHtmlExported(true)
+    setTimeout(() => setHtmlExported(false), 2000)
+  }
+
+  const handleExportPdf = () => {
+    if (!html) return
+    // Open in a new window and print
+    const printWindow = window.open('', '_blank')
+    if (!printWindow) {
+      // Fallback: if popup blocked, do inline print
+      window.print()
+      return
+    }
+    printWindow.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Markdown Export</title><style>body{max-width:800px;margin:40px auto;padding:0 20px;font:16px/1.6 system-ui,sans-serif;color:#333}code{background:#f4f4f4;padding:2px 6px;border-radius:3px;font-size:0.9em}pre{background:#f4f4f4;padding:16px;border-radius:8px;overflow-x:auto;page-break-inside:avoid}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ddd;padding:8px;text-align:left}th{background:#f8f8f8}blockquote{border-left:4px solid #ddd;margin:0;padding:0 16px;color:#666}img{max-width:100%}@media print{body{margin:0;padding:20px}}h1,h2,h3,h4{page-break-after:avoid}</style></head><body>${html}</body></html>`)
+    printWindow.document.close()
+    printWindow.focus()
+    // Wait a moment for styles to load
+    setTimeout(() => printWindow.print(), 200)
+  }
+
+  const handleExportWord = () => {
+    if (!html) return
+    // Word can open HTML files - create a Word-compatible HTML document
+    const wordHtml = `
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head><meta charset="utf-8"><title>Markdown Export</title>
+<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View></w:WordDocument></xml><![endif]-->
+<style>
+body{font:12pt/1.6 'Calibri',system-ui,sans-serif;max-width:800px;margin:40px auto;padding:0 20px;color:#333}
+code{background:#f4f4f4;padding:2px 6px;font-size:10pt}
+pre{background:#f4f4f4;padding:16px;border:1px solid #ddd;font-size:10pt;white-space:pre-wrap}
+table{border-collapse:collapse;width:100%;margin:8px 0}
+td,th{border:1px solid #999;padding:6px 8px}
+th{background:#f0f0f0}
+blockquote{border-left:4px solid #ddd;margin:8px 0;padding:0 16px;color:#666}
+img{max-width:100%}
+</style>
+</head><body>${html}</body></html>`
+    const blob = new Blob([wordHtml], { type: 'application/msword' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'markdown-export.doc'
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   return (
@@ -76,8 +122,10 @@ export default function MarkdownEditor() {
       <Link to="/" className="btn btn-outline" style={{ marginBottom: '12px', display: 'inline-block', textDecoration: 'none' }}>← {t('btn.back')}</Link>
 
       <div className="diff-toolbar">
-        <button className="btn btn-purple" onClick={handleCopyHtml}>{copied ? '✅ Copied!' : '📋 ' + (t('md.copy_html') || 'Copy HTML')}</button>
-        <button className="btn btn-purple" onClick={handleExportHtml}>📥 {t('md.export_html') || 'Export HTML'}</button>
+        <button className="btn btn-purple" onClick={handleCopyHtml}>{htmlCopied ? '✅ Copied!' : '📋 ' + (t('md.copy_html') || 'Copy HTML')}</button>
+        <button className="btn btn-purple" onClick={handleExportHtml}>{htmlExported ? '✅ Done!' : '📄 ' + (t('md.export_html') || 'Export HTML')}</button>
+        <button className="btn btn-purple" onClick={handleExportPdf}>📕 PDF</button>
+        <button className="btn btn-purple" onClick={handleExportWord}>📘 Word</button>
         <button className="btn btn-purple" onClick={handleClear}>🗑️ {t('md.clear') || 'Clear'}</button>
       </div>
 
