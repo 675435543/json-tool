@@ -57,6 +57,10 @@ export const toolCategories: ToolCategory[] = [
       { path: '/jwt-decode', icon: '🔓', nameKey: 'home.jwt', descKey: 'home.desc_jwt', categoryKey: 'home.cat_devtools' },
       { path: '/json-stats', icon: '📊', nameKey: 'home.stats', descKey: 'home.desc_stats', categoryKey: 'home.cat_devtools' },
       { path: '/api-tester', icon: '🚀', nameKey: 'home.api_tester', descKey: 'home.desc_api_tester', categoryKey: 'home.cat_devtools' },
+      { path: '/markdown-editor', icon: '📝', nameKey: 'home.md', descKey: 'home.desc_md', categoryKey: 'home.cat_devtools' },
+      { path: '/base64-encode-decode', icon: '🔐', nameKey: 'home.base64', descKey: 'home.desc_base64', categoryKey: 'home.cat_devtools' },
+      { path: '/regex-tester', icon: '🔍', nameKey: 'home.regex', descKey: 'home.desc_regex', categoryKey: 'home.cat_devtools' },
+      { path: '/code-formatter', icon: '✨', nameKey: 'home.codefmt', descKey: 'home.desc_codefmt', categoryKey: 'home.cat_devtools' },
     ],
   },
 ]

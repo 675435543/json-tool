@@ -25,6 +25,10 @@ import JsonStats from './pages/tools/JsonStats'
 import JsonFlatten from './pages/tools/JsonFlatten'
 import JsonPlayground from './pages/tools/JsonPlayground'
 import ApiTester from './pages/tools/ApiTester'
+import MarkdownEditor from './pages/tools/MarkdownEditor'
+import Base64Tool from './pages/tools/Base64Tool'
+import RegexTester from './pages/tools/RegexTester'
+import CodeFormatter from './pages/tools/CodeFormatter'
 import BlogIndex from './pages/blog/BlogIndex'
 import BlogJsonGuide from './pages/blog/JsonGuide'
 import BlogApiGuide from './pages/blog/ApiGuide'
@@ -106,6 +110,10 @@ export default function App() {
         <Route path="/json-flatten" element={<JsonFlatten />} />
         <Route path="/json-playground" element={<JsonPlayground />} />
         <Route path="/api-tester" element={<ApiTester />} />
+        <Route path="/markdown-editor" element={<MarkdownEditor />} />
+        <Route path="/base64-encode-decode" element={<Base64Tool />} />
+        <Route path="/regex-tester" element={<RegexTester />} />
+        <Route path="/code-formatter" element={<CodeFormatter />} />
         <Route path="/json-converter" element={<JsonConverterHub />} />
         <Route path="/blog" element={<BlogIndex />} />
         <Route path="/blog/json-guide" element={<BlogJsonGuide />} />
